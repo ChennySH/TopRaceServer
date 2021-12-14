@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace TopRaceServer
 {
-
     public class Program
     {
         public static void Main(string[] args)
