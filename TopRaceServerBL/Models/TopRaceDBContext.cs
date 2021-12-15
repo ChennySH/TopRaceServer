@@ -36,7 +36,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<ChatRoom>(entity =>
             {
@@ -126,14 +126,6 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.ProfilePic)
                     .IsRequired()
                     .HasMaxLength(255);
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Players)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("player_userid_foreign");
             });
 
             modelBuilder.Entity<PlayersInGame>(entity =>
@@ -200,9 +192,17 @@ namespace TopRaceServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
+
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(255);
+
+                entity.HasOne(d => d.Player)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.PlayerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("user_playerid_foreign");
             });
 
             OnModelCreatingPartial(modelBuilder);
