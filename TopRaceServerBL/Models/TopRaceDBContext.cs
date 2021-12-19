@@ -20,6 +20,7 @@ namespace TopRaceServerBL.Models
         public virtual DbSet<ChatRoom> ChatRooms { get; set; }
         public virtual DbSet<Color> Colors { get; set; }
         public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<GameStatus> GameStatuses { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Player> Players { get; set; }
         public virtual DbSet<PlayersInGame> PlayersInGames { get; set; }
@@ -36,7 +37,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<ChatRoom>(entity =>
             {
@@ -76,11 +77,32 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.HostPlayerId).HasColumnName("HostPlayerID");
 
+                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
                 entity.HasOne(d => d.ChatRoom)
                     .WithMany(p => p.Games)
                     .HasForeignKey(d => d.ChatRoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_chatroomid_foreign");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("game_statusid_foreign");
+            });
+
+            modelBuilder.Entity<GameStatus>(entity =>
+            {
+                entity.ToTable("GameStatus");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.StatusName)
+                    .IsRequired()
+                    .HasMaxLength(255);
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -122,6 +144,10 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("id");
+
+                entity.Property(e => e.PlayerName)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.ProfilePic)
                     .IsRequired()
@@ -174,6 +200,9 @@ namespace TopRaceServerBL.Models
                 entity.ToTable("User");
 
                 entity.HasIndex(e => e.Email, "user_email_unique")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.UserName, "user_username_unique")
                     .IsUnique();
 
                 entity.Property(e => e.Id)

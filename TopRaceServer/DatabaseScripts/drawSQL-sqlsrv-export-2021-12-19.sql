@@ -3,15 +3,18 @@ CREATE TABLE "User"(
     "UserName" NVARCHAR(255) NOT NULL,
     "Email" NVARCHAR(255) NOT NULL,
     "Password" NVARCHAR(255) NOT NULL,
-    "PhoneNumber" NVARCHAR(255) NOT NULL
+    "PhoneNumber" NVARCHAR(255) NOT NULL,
+    "PlayerID" INT NOT NULL
 );
 ALTER TABLE
     "User" ADD CONSTRAINT "user_id_primary" PRIMARY KEY("id");
+CREATE UNIQUE INDEX "user_username_unique" ON
+    "User"("UserName");
 CREATE UNIQUE INDEX "user_email_unique" ON
     "User"("Email");
 CREATE TABLE "Player"(
     "id" INT NOT NULL,
-    "UserID" INT NOT NULL,
+    "PlayerName" NVARCHAR(255) NOT NULL,
     "WinsNumber" INT NOT NULL,
     "LosesNumber" INT NOT NULL,
     "WinStreak" INT NOT NULL,
@@ -26,7 +29,8 @@ CREATE TABLE "Game"(
     "HostPlayerID" INT NOT NULL,
     "CurrentTurn" INT NOT NULL,
     "Players" INT NOT NULL,
-    "ChatRoomID" INT NOT NULL
+    "ChatRoomID" INT NOT NULL,
+    "StatusID" INT NOT NULL
 );
 ALTER TABLE
     "Game" ADD CONSTRAINT "game_id_primary" PRIMARY KEY("id");
@@ -60,8 +64,14 @@ CREATE TABLE "Message"(
 );
 ALTER TABLE
     "Message" ADD CONSTRAINT "message_id_primary" PRIMARY KEY("id");
+CREATE TABLE "GameStatus"(
+    "id" INT NOT NULL,
+    "StatusName" NVARCHAR(255) NOT NULL
+);
 ALTER TABLE
-    "Player" ADD CONSTRAINT "player_userid_foreign" FOREIGN KEY("UserID") REFERENCES "User"("id");
+    "GameStatus" ADD CONSTRAINT "gamestatus_id_primary" PRIMARY KEY("id");
+ALTER TABLE
+    "User" ADD CONSTRAINT "user_playerid_foreign" FOREIGN KEY("PlayerID") REFERENCES "Player"("id");
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_playerid_foreign" FOREIGN KEY("PlayerID") REFERENCES "Player"("id");
 ALTER TABLE
@@ -76,3 +86,5 @@ ALTER TABLE
     "Game" ADD CONSTRAINT "game_chatroomid_foreign" FOREIGN KEY("ChatRoomID") REFERENCES "ChatRoom"("id");
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_colorid_foreign" FOREIGN KEY("ColorID") REFERENCES "Color"("id");
+ALTER TABLE
+    "Game" ADD CONSTRAINT "game_statusid_foreign" FOREIGN KEY("StatusID") REFERENCES "GameStatus"("id");
