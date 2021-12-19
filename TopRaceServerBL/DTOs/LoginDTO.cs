@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TopRaceServer.DTOs
+namespace TopRaceServerBL.DTOs
 {
     public class LoginDTO
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TopRaceServer.DTO;
+using TopRaceServerBL.DTOs;
 //Add the below
 using TopRaceServerBL.Models;
 using System.IO;
@@ -55,7 +55,12 @@ namespace TopRaceServer.Controllers
                 return false;
             else
             {
-                user.Player = new Player { };
+                user.Player = new Player
+                {
+                    WinsNumber = 0,
+                    LosesNumber = 0,
+                    WinStreak = 0
+                };
                 this.context.Users.Add(user);
                 this.context.SaveChanges();
                 return true;
@@ -72,6 +77,18 @@ namespace TopRaceServer.Controllers
         public bool IsEmailExist([FromBody] string email)
         {
             return this.context.IsEmailExist(email);
+        }
+        [Route("AddWin")]
+        [HttpPost]
+        public void AddWin([FromBody] UserDTO userDTO)
+        {
+            this.context.AddWin(userDTO);
+        }
+        [Route("AddLose")]
+        [HttpPost]
+        public void AddLose([FromBody] UserDTO userDTO)
+        {
+            this.context.AddLose(userDTO);
         }
     }
 }
