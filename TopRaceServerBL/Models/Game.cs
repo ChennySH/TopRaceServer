@@ -18,7 +18,6 @@ namespace TopRaceServerBL.Models
         public string PrivateKey { get; set; }
         public int HostPlayerId { get; set; }
         public int CurrentTurn { get; set; }
-        public int Players { get; set; }
         public int ChatRoomId { get; set; }
         public int StatusId { get; set; }
 
