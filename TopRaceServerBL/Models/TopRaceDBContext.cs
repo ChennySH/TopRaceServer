@@ -37,7 +37,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<ChatRoom>(entity =>
             {
@@ -75,7 +75,15 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
 
+                entity.Property(e => e.GameName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.HostPlayerId).HasColumnName("HostPlayerID");
+
+                entity.Property(e => e.PrivateKey)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
 
@@ -84,6 +92,12 @@ namespace TopRaceServerBL.Models
                     .HasForeignKey(d => d.ChatRoomId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_chatroomid_foreign");
+
+                entity.HasOne(d => d.HostPlayer)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.HostPlayerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("game_hostplayerid_foreign");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Games)

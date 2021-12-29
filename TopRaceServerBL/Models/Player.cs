@@ -9,6 +9,7 @@ namespace TopRaceServerBL.Models
     {
         public Player()
         {
+            Games = new HashSet<Game>();
             PlayersInGames = new HashSet<PlayersInGame>();
             Users = new HashSet<User>();
         }
@@ -20,6 +21,7 @@ namespace TopRaceServerBL.Models
         public int WinStreak { get; set; }
         public string ProfilePic { get; set; }
 
+        public virtual ICollection<Game> Games { get; set; }
         public virtual ICollection<PlayersInGame> PlayersInGames { get; set; }
         public virtual ICollection<User> Users { get; set; }
     }

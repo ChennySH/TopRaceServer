@@ -1,10 +1,13 @@
+--CREATE DATABASE TopRaceDB
+-- 29.12.2021
+USE TopRaceDB
 CREATE TABLE "User"(
     "id" INT NOT NULL,
     "UserName" NVARCHAR(255) NOT NULL,
     "Email" NVARCHAR(255) NOT NULL,
     "Password" NVARCHAR(255) NOT NULL,
     "PhoneNumber" NVARCHAR(255) NOT NULL,
-    "PlayerID" INT NOT NULL
+    "PlayerID" INT NULL
 );
 ALTER TABLE
     "User" ADD CONSTRAINT "user_id_primary" PRIMARY KEY("id");
@@ -24,11 +27,11 @@ ALTER TABLE
     "Player" ADD CONSTRAINT "player_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Game"(
     "id" INT NOT NULL,
+    "GameName" NVARCHAR(255) NOT NULL,
     "IsPrivate" BIT NOT NULL,
-    "PrivateKey" INT NOT NULL,
+    "PrivateKey" NVARCHAR(255) NOT NULL,
     "HostPlayerID" INT NOT NULL,
     "CurrentTurn" INT NOT NULL,
-    "Players" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "StatusID" INT NOT NULL
 );
@@ -76,6 +79,8 @@ ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_playerid_foreign" FOREIGN KEY("PlayerID") REFERENCES "Player"("id");
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
+ALTER TABLE
+    "Game" ADD CONSTRAINT "game_hostplayerid_foreign" FOREIGN KEY("HostPlayerID") REFERENCES "Player"("id");
 ALTER TABLE
     "Message" ADD CONSTRAINT "message_fromid_foreign" FOREIGN KEY("FromID") REFERENCES "PlayersInGame"("id");
 ALTER TABLE

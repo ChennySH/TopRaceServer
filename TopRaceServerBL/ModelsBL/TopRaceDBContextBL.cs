@@ -13,11 +13,11 @@ namespace TopRaceServerBL.Models
     {
         public User GetUser(string userNameOrEmail, string password)
         {
-            User u = this.Users.Include(uc => uc.Player).ThenInclude(p => p.PlayersInGames).Where(uc => uc.UserName == userNameOrEmail && uc.Password == password).FirstOrDefault();
+            User u = this.Users.Include(uc => uc.Player).Where(uc => uc.UserName == userNameOrEmail && uc.Password == password).FirstOrDefault();
             if (u != null)
                 return u;
             else
-                return this.Users.Include(uc => uc.Player).ThenInclude(p => p.PlayersInGames).Where(uc => uc.Email == userNameOrEmail && uc.Password == password).FirstOrDefault();
+                return this.Users.Include(uc => uc.Player).Where(uc => uc.Email == userNameOrEmail && uc.Password == password).FirstOrDefault();
         }
         public bool IsExist(string userName, string email)
         {
@@ -50,6 +50,51 @@ namespace TopRaceServerBL.Models
             Player player = user.Player;
             player.LosesNumber++;
             player.WinStreak = 0;
+        }
+        public void HostGame(UserDTO userDTO)
+        {
+            User u = this.Users.Include(uc => uc.Player).ThenInclude(p => p.Games).Where(uc => uc.UserName == userDTO.UserName && uc.Password == userDTO.Email).FirstOrDefault();
+            Player p = u.Player;
+            Game newGame = new Game
+            {
+                GameName = $"{p.PlayerName}'s Game",
+                IsPrivate = true,
+                PrivateKey = GetPrivateKey(),
+
+            };
+        }
+        public string GetPrivateKey()
+        {
+            List<char> lst = new List<char>();
+            for (int i = '0'; i < '9' + 1; i++)
+            {
+                lst.Add((char)i);
+            }
+            for (int i = 'A'; i < 'Z' + 1; i++)
+            {
+                if (i != 'O')
+                    lst.Add((char)i);
+            }
+            string privateKey = "";
+            do
+            {
+                privateKey = "";
+                for (int i = 0; i < 4; i++)
+                {
+                    Random rnd = new Random();
+                    privateKey += lst[rnd.Next(0, lst.Count())];
+                }
+            }while(this.IsKeyInUse(privateKey));
+            return privateKey;
+        }
+        public bool IsKeyInUse(string key)
+        {
+            foreach (Game g in this.Games) 
+            {
+                if (g.StatusId != 2 && g.PrivateKey == key)
+                    return true;
+            }
+            return false;
         }
     }
 }

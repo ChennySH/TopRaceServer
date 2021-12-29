@@ -92,5 +92,11 @@ namespace TopRaceServer.Controllers
         {
             this.context.AddLose(userDTO);
         }
+        [Route("HostGame")]
+        [HttpPost]
+        public void HostGame([FromBody] UserDTO userDTO)
+        {
+
+        }
     }
 }
