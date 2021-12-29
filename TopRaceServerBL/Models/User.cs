@@ -12,7 +12,7 @@ namespace TopRaceServerBL.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
-        public int PlayerId { get; set; }
+        public int? PlayerId { get; set; }
 
         public virtual Player Player { get; set; }
     }

@@ -37,7 +37,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<ChatRoom>(entity =>
             {
@@ -230,7 +230,6 @@ namespace TopRaceServerBL.Models
                 entity.HasOne(d => d.Player)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.PlayerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("user_playerid_foreign");
             });
 
