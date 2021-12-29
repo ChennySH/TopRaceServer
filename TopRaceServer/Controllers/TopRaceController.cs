@@ -96,7 +96,13 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public void HostGame([FromBody] UserDTO userDTO)
         {
-
+            this.context.HostGame(userDTO);
+        }
+        [Route("GetGameStatus")]
+        [HttpGet]
+        public GameStatus GetGameStatus([FromQuery] int statusId)
+        {
+            return this.context.GameStatuses.Where(s => s.Id == statusId).FirstOrDefault();
         }
     }
 }

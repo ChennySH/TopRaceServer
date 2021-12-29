@@ -60,8 +60,11 @@ namespace TopRaceServerBL.Models
                 GameName = $"{p.PlayerName}'s Game",
                 IsPrivate = true,
                 PrivateKey = GetPrivateKey(),
-
+                Status = this.GameStatuses.Where(s => s.Id == 0).FirstOrDefault(),
             };
+            ChatRoom chatRoom = new ChatRoom();
+            newGame.ChatRoom = chatRoom;
+            p.Games.Add(newGame);
         }
         public string GetPrivateKey()
         {
