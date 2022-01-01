@@ -51,21 +51,7 @@ namespace TopRaceServerBL.Models
             player.LosesNumber++;
             player.WinStreak = 0;
         }
-        public void HostGame(UserDTO userDTO)
-        {
-            User u = this.Users.Include(uc => uc.Player).ThenInclude(p => p.Games).Where(uc => uc.UserName == userDTO.UserName && uc.Password == userDTO.Email).FirstOrDefault();
-            Player p = u.Player;
-            Game newGame = new Game
-            {
-                GameName = $"{p.PlayerName}'s Game",
-                IsPrivate = true,
-                PrivateKey = GetPrivateKey(),
-                Status = this.GameStatuses.Where(s => s.Id == 0).FirstOrDefault(),
-            };
-            ChatRoom chatRoom = new ChatRoom();
-            newGame.ChatRoom = chatRoom;
-            p.Games.Add(newGame);
-        }
+        
         public string GetPrivateKey()
         {
             List<char> lst = new List<char>();
