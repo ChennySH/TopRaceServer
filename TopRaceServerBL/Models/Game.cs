@@ -9,6 +9,7 @@ namespace TopRaceServerBL.Models
     {
         public Game()
         {
+            MoversInGames = new HashSet<MoversInGame>();
             PlayersInGames = new HashSet<PlayersInGame>();
         }
 
@@ -20,10 +21,12 @@ namespace TopRaceServerBL.Models
         public int CurrentTurn { get; set; }
         public int ChatRoomId { get; set; }
         public int StatusId { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         public virtual ChatRoom ChatRoom { get; set; }
         public virtual Player HostPlayer { get; set; }
         public virtual GameStatus Status { get; set; }
+        public virtual ICollection<MoversInGame> MoversInGames { get; set; }
         public virtual ICollection<PlayersInGame> PlayersInGames { get; set; }
     }
 }

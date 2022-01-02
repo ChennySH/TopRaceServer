@@ -19,9 +19,11 @@ namespace TopRaceServerBL.Models
         public int ColorId { get; set; }
         public int ChatRoomId { get; set; }
         public int GameId { get; set; }
+        public int CurrentPosId { get; set; }
 
         public virtual ChatRoom ChatRoom { get; set; }
         public virtual Color Color { get; set; }
+        public virtual Position CurrentPos { get; set; }
         public virtual Game Game { get; set; }
         public virtual Player Player { get; set; }
         public virtual ICollection<Message> Messages { get; set; }

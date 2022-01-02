@@ -22,8 +22,10 @@ namespace TopRaceServerBL.Models
         public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<GameStatus> GameStatuses { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<MoversInGame> MoversInGames { get; set; }
         public virtual DbSet<Player> Players { get; set; }
         public virtual DbSet<PlayersInGame> PlayersInGames { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -80,6 +82,8 @@ namespace TopRaceServerBL.Models
                     .HasMaxLength(255);
 
                 entity.Property(e => e.HostPlayerId).HasColumnName("HostPlayerID");
+
+                entity.Property(e => e.LastUpdateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.PrivateKey)
                     .IsRequired()
@@ -151,6 +155,39 @@ namespace TopRaceServerBL.Models
                     .HasConstraintName("message_fromid_foreign");
             });
 
+            modelBuilder.Entity<MoversInGame>(entity =>
+            {
+                entity.ToTable("MoversInGame");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.EndPosId).HasColumnName("EndPosID");
+
+                entity.Property(e => e.GameId).HasColumnName("GameID");
+
+                entity.Property(e => e.StartPosId).HasColumnName("StartPosID");
+
+                entity.HasOne(d => d.EndPos)
+                    .WithMany(p => p.MoversInGameEndPos)
+                    .HasForeignKey(d => d.EndPosId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("moversingame_endposid_foreign");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.MoversInGames)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("moversingame_gameid_foreign");
+
+                entity.HasOne(d => d.StartPos)
+                    .WithMany(p => p.MoversInGameStartPos)
+                    .HasForeignKey(d => d.StartPosId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("moversingame_startposid_foreign");
+            });
+
             modelBuilder.Entity<Player>(entity =>
             {
                 entity.ToTable("Player");
@@ -180,6 +217,8 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.ColorId).HasColumnName("ColorID");
 
+                entity.Property(e => e.CurrentPosId).HasColumnName("CurrentPosID");
+
                 entity.Property(e => e.GameId).HasColumnName("GameID");
 
                 entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
@@ -196,6 +235,12 @@ namespace TopRaceServerBL.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("playersingame_colorid_foreign");
 
+                entity.HasOne(d => d.CurrentPos)
+                    .WithMany(p => p.PlayersInGames)
+                    .HasForeignKey(d => d.CurrentPosId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("playersingame_currentposid_foreign");
+
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.PlayersInGames)
                     .HasForeignKey(d => d.GameId)
@@ -207,6 +252,20 @@ namespace TopRaceServerBL.Models
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("playersingame_playerid_foreign");
+            });
+
+            modelBuilder.Entity<Position>(entity =>
+            {
+                entity.ToTable("Position");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.String)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnName("string");
             });
 
             modelBuilder.Entity<User>(entity =>
