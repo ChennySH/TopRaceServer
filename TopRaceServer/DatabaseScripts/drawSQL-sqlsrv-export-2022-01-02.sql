@@ -1,4 +1,6 @@
 CREATE DATABASE TopRaceDB
+GO
+USE TopRaceDB
 CREATE TABLE "User"(
     "id" INT NOT NULL,
     "UserName" NVARCHAR(255) NOT NULL,
@@ -75,7 +77,8 @@ ALTER TABLE
     "GameStatus" ADD CONSTRAINT "gamestatus_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Position"(
     "id" INT NOT NULL,
-    "string" NVARCHAR(255) NOT NULL
+    "x" INT NOT NULL,
+    "y" INT NOT NULL
 );
 ALTER TABLE
     "Position" ADD CONSTRAINT "position_id_primary" PRIMARY KEY("id");

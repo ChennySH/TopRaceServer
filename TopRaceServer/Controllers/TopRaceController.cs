@@ -94,11 +94,15 @@ namespace TopRaceServer.Controllers
         }
         [Route("HostGame")]
         [HttpPost]
-        public bool HostGame([FromBody] Game game)
+        public Game HostGame([FromBody] Game game)
         {
+            game.Status = this.context.GameStatuses.Where(s => s.Id == 0).FirstOrDefault();
+            game.PrivateKey = this.context.GetPrivateKey();
+            game.ChatRoom = new ChatRoom();
+            game.PlayersInGames.Add(this.context.AddPlayer(game.HostPlayer, true, game));
             this.context.Games.Add(game);
             this.context.SaveChanges();
-            return true;
+            Game fullGame = this.context.Games.Where(g => g.HostPlayerId == game.HostPlayerId).Include.LastOrDefault();
         }
         [Route("GetGameStatus")]
         [HttpGet]

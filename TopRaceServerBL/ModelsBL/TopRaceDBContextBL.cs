@@ -85,5 +85,45 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
+        public PlayersInGame AddPlayer(Player player, bool isHost, Game game)
+        {
+            PlayersInGame playerInGame = new PlayersInGame
+            {
+                Player = player,
+                IsHost = isHost,
+                Number = game.PlayersInGames.Count(),
+                Color = GetColor(game),
+                CurrentPos = GetPosition(0, 0)
+            };
+            return playerInGame;
+        }
+        public Color GetColor(Game game)
+        {
+            foreach (Color color in Colors)
+            {
+                bool isInUse = false;
+                foreach (PlayersInGame p in game.PlayersInGames)
+                {
+                    if (p.Color == color)
+                        isInUse = true;
+                }
+                if (!isInUse)
+                    return color;
+            }
+            return null;
+        }
+        public Position GetPosition(int x, int y)
+        {
+            Position p = this.Positions.Where(p => p.X == x && p.Y == y).FirstOrDefault();
+            if (p != null)
+                return p;
+            Position pos = new Position
+            {
+                X = x,
+                Y = y
+            };
+            this.Positions.Add(pos);
+            return pos;
+        }
     }
 }

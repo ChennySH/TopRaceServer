@@ -262,10 +262,9 @@ namespace TopRaceServerBL.Models
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
-                entity.Property(e => e.String)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .HasColumnName("string");
+                entity.Property(e => e.X).HasColumnName("x");
+
+                entity.Property(e => e.Y).HasColumnName("y");
             });
 
             modelBuilder.Entity<User>(entity =>
