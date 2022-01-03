@@ -102,7 +102,7 @@ namespace TopRaceServer.Controllers
             game.PlayersInGames.Add(this.context.AddPlayer(game.HostPlayer, true, game));
             this.context.Games.Add(game);
             this.context.SaveChanges();
-            Game fullGame = this.context.Games.Where(g => g.HostPlayerId == game.HostPlayerId).Include.LastOrDefault();
+            return game;
         }
         [Route("GetGameStatus")]
         [HttpGet]
