@@ -46,7 +46,8 @@ CREATE TABLE "PlayersInGame"(
     "ColorID" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "GameID" INT NOT NULL,
-    "CurrentPosID" INT NOT NULL
+    "CurrentPosID" INT NOT NULL,
+    "LastMoveTime" DATETIME NOT NULL
 );
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_id_primary" PRIMARY KEY("id");
@@ -119,7 +120,7 @@ ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
 ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
-    go
+	    go
 use TopRaceDB 
 insert GameStatus (StatusName)
 values ('Wait');

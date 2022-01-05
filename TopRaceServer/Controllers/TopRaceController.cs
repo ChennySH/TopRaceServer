@@ -97,7 +97,7 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public Game HostGame([FromBody] Game game)
         {
-            game.Status = this.context.GameStatuses.Where(s => s.Id == 0).FirstOrDefault();
+            game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
             game.PrivateKey = this.context.GetPrivateKey();
             game.ChatRoom = new ChatRoom();
             game.PlayersInGames.Add(this.context.AddPlayer(game.HostPlayer, true, game));
