@@ -84,6 +84,7 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public void AddWin([FromBody] UserDTO userDTO)
         {
+            User u = HttpContext.Session.GetObject<User>("theUser");
             this.context.AddWin(userDTO);
         }
         [Route("AddLose")]

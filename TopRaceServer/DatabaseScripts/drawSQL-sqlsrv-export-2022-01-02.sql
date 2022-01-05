@@ -2,7 +2,7 @@ CREATE DATABASE TopRaceDB
 GO
 USE TopRaceDB
 CREATE TABLE "User"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "UserName" NVARCHAR(255) NOT NULL,
     "Email" NVARCHAR(255) NOT NULL,
     "Password" NVARCHAR(255) NOT NULL,
@@ -16,7 +16,7 @@ CREATE UNIQUE INDEX "user_username_unique" ON
 CREATE UNIQUE INDEX "user_email_unique" ON
     "User"("Email");
 CREATE TABLE "Player"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "PlayerName" NVARCHAR(255) NOT NULL,
     "WinsNumber" INT NOT NULL,
     "LosesNumber" INT NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE "Player"(
 ALTER TABLE
     "Player" ADD CONSTRAINT "player_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Game"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "GameName" NVARCHAR(255) NOT NULL,
     "IsPrivate" BIT NOT NULL,
     "PrivateKey" NVARCHAR(255) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE "Game"(
 ALTER TABLE
     "Game" ADD CONSTRAINT "game_id_primary" PRIMARY KEY("id");
 CREATE TABLE "PlayersInGame"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "PlayerID" INT NOT NULL,
     "IsHost" BIT NOT NULL,
     "Number" INT NOT NULL,
@@ -50,18 +50,18 @@ CREATE TABLE "PlayersInGame"(
 );
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_id_primary" PRIMARY KEY("id");
-CREATE TABLE "ChatRoom"("id" INT NOT NULL);
+CREATE TABLE "ChatRoom"("id" INT identity NOT NULL);
 ALTER TABLE
     "ChatRoom" ADD CONSTRAINT "chatroom_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Color"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "ColorName" NVARCHAR(255) NOT NULL,
     "PicLink" NVARCHAR(255) NOT NULL
 );
 ALTER TABLE
     "Color" ADD CONSTRAINT "color_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Message"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "FromID" INT NOT NULL,
     "Message" NVARCHAR(255) NOT NULL,
     "ChatRoomID" INT NOT NULL,
@@ -70,20 +70,20 @@ CREATE TABLE "Message"(
 ALTER TABLE
     "Message" ADD CONSTRAINT "message_id_primary" PRIMARY KEY("id");
 CREATE TABLE "GameStatus"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "StatusName" NVARCHAR(255) NOT NULL
 );
 ALTER TABLE
     "GameStatus" ADD CONSTRAINT "gamestatus_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Position"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "x" INT NOT NULL,
     "y" INT NOT NULL
 );
 ALTER TABLE
     "Position" ADD CONSTRAINT "position_id_primary" PRIMARY KEY("id");
 CREATE TABLE "MoversInGame"(
-    "id" INT NOT NULL,
+    "id" INT identity NOT NULL,
     "GameID" INT NOT NULL,
     "StartPosID" INT NOT NULL,
     "EndPosID" INT NOT NULL,
@@ -119,3 +119,11 @@ ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
 ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
+    go
+use TopRaceDB 
+insert GameStatus (StatusName)
+values ('Wait');
+insert GameStatus (StatusName)
+values ('On');
+insert GameStatus (StatusName)
+values ('InActive');
