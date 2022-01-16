@@ -123,7 +123,12 @@ namespace TopRaceServerBL.Models
                 Y = y
             };
             this.Positions.Add(pos);
+            SaveChanges();
             return pos;
+        }
+        public Game GetGame(int GameID)
+        {
+            return this.Games.Include(g => g.ChatRoom).Include(g => g.PlayersInGames).Where(g => g.Id == GameID).FirstOrDefault();
         }
     }
 }

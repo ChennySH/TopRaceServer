@@ -113,9 +113,15 @@ namespace TopRaceServer.Controllers
         }
         [Route("GetPrivateKey")]
         [HttpGet]
-        public string GetPrivateKey([FromQuery] int statusId)
+        public string GetPrivateKey()
         {
             return this.context.GetPrivateKey();
+        }
+        [Route("GetGame")]
+        [HttpGet]
+        public Game GetGame([FromQuery] int GameID)
+        {
+            return this.context.GetGame(GameID);
         }
     }
 }
