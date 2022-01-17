@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TopRaceServerBL.DTOs;
+using TopRaceServer.DTOs;
 //Add the below
 using TopRaceServerBL.Models;
 using System.IO;
@@ -84,14 +84,13 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public void AddWin([FromBody] UserDTO userDTO)
         {
-            User u = HttpContext.Session.GetObject<User>("theUser");
-            this.context.AddWin(userDTO);
+            this.context.AddWin(userDTO.UserName, userDTO.Email);
         }
         [Route("AddLose")]
         [HttpPost]
         public void AddLose([FromBody] UserDTO userDTO)
         {
-            this.context.AddLose(userDTO);
+            this.context.AddLose(userDTO.UserName, userDTO.Email);
         }
         [Route("HostGame")]
         [HttpPost]
@@ -122,6 +121,21 @@ namespace TopRaceServer.Controllers
         public Game GetGame([FromQuery] int GameID)
         {
             return this.context.GetGame(GameID);
+        }
+        [Route("SendMessage")]
+        [HttpPost]
+        public bool SendMessage([FromBody] Message message)
+        {
+            try
+            {
+                PlayersInGame p = this.context.PlayersInGames.Where(p => p.Id == message.FromId).FirstOrDefault();
+                this.context.AddMessage(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

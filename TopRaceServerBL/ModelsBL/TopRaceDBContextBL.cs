@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TopRaceServerBL.Models;
-using TopRaceServerBL.DTOs;
+
 
 namespace TopRaceServerBL.Models
 {
@@ -37,16 +37,16 @@ namespace TopRaceServerBL.Models
             bool isExist = (u != null);
             return isExist;
         }
-        public void AddWin(UserDTO userDTO)
+        public void AddWin(string userName, string email)
         {
-            User user = this.Users.Include(uc => uc.Player).Where(uc => uc.Email == userDTO.Email && uc.UserName == userDTO.UserName).FirstOrDefault();
+            User user = this.Users.Include(uc => uc.Player).Where(uc => uc.Email == email && uc.UserName == userName).FirstOrDefault();
             Player player = user.Player;
             player.WinsNumber++;
             player.WinStreak++;
         }
-        public void AddLose(UserDTO userDTO)
+        public void AddLose(string userName, string email)
         {
-            User user = this.Users.Include(uc => uc.Player).Where(uc => uc.Email == userDTO.Email && uc.UserName == userDTO.UserName).FirstOrDefault();
+            User user = this.Users.Include(uc => uc.Player).Where(uc => uc.Email == email && uc.UserName == userName).FirstOrDefault();
             Player player = user.Player;
             player.LosesNumber++;
             player.WinStreak = 0;
@@ -129,6 +129,12 @@ namespace TopRaceServerBL.Models
         public Game GetGame(int GameID)
         {
             return this.Games.Include(g => g.ChatRoom).Include(g => g.PlayersInGames).Where(g => g.Id == GameID).FirstOrDefault();
+        }
+        public void AddMessage(Message m, int ChatRoomID)
+        {
+            ChatRoom chatRoom = this.ChatRooms.Where(c => c.Id == ChatRoomID).FirstOrDefault();
+            chatRoom.Messages.Add(m);
+            SaveChanges();
         }
     }
 }
