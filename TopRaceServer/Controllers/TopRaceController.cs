@@ -55,15 +55,21 @@ namespace TopRaceServer.Controllers
                 return false;
             else
             {
-                user.Player = new Player
+                Player p = new Player()
                 {
+                   
                     PlayerName = user.UserName,
                     WinsNumber = 0,
                     LosesNumber = 0,
                     WinStreak = 0,
                     ProfilePic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                 };
-                this.context.Users.Add(user);
+                //p.Users.Add(user);
+                
+                this.context.Players.Add(p);
+               
+                this.context.SaveChanges();
+                p.Users.Add(user);
                 this.context.SaveChanges();
                 return true;
             }
@@ -82,45 +88,101 @@ namespace TopRaceServer.Controllers
         }
         [Route("AddWin")]
         [HttpPost]
-        public void AddWin([FromBody] UserDTO userDTO)
+        public void AddWin([FromBody] User user)
         {
-            this.context.AddWin(userDTO.UserName, userDTO.Email);
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (!currentUser.Equals(user))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return;
+                }
+                this.context.AddWin(user);
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+            }
         }
         [Route("AddLose")]
         [HttpPost]
-        public void AddLose([FromBody] UserDTO userDTO)
+        public void AddLose([FromBody] User user)
         {
-            this.context.AddLose(userDTO.UserName, userDTO.Email);
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (!currentUser.Equals(user))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return;
+                }   
+                this.context.AddLose(user);
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+            }
         }
         [Route("HostGame")]
         [HttpPost]
         public Game HostGame([FromBody] Game game)
         {
-            game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
-            game.PrivateKey = this.context.GetPrivateKey();
-            game.ChatRoom = new ChatRoom();
-            game.PlayersInGames.Add(this.context.AddPlayer(game.HostPlayer, true, game));
-            this.context.Games.Add(game);
-            this.context.SaveChanges();
-            return game;
+            try
+            {
+                Player host = game.HostPlayer;
+                User u = this.context.Users.Where(us => us.Player == host).FirstOrDefault();
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (!currentUser.Equals(u))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
+                game.PrivateKey = this.context.GetPrivateKey();
+                game.ChatRoom = new ChatRoom();
+                game.PlayersInGames.Add(this.context.AddPlayer(game.HostPlayer, true, game));
+                this.context.Games.Add(game);
+                this.context.SaveChanges();
+                return game;
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
         }
-        [Route("GetGameStatus")]
-        [HttpGet]
-        public GameStatus GetGameStatus([FromQuery] int statusId)
-        {
-            return this.context.GameStatuses.Where(s => s.Id == statusId).FirstOrDefault();
-        }
-        [Route("GetPrivateKey")]
-        [HttpGet]
-        public string GetPrivateKey()
-        {
-            return this.context.GetPrivateKey();
-        }
+        //[Route("GetGameStatus")]
+        //[HttpGet]
+        //public GameStatus GetGameStatus([FromQuery] int statusId)
+        //{
+        //    return this.context.GameStatuses.Where(s => s.Id == statusId).FirstOrDefault();
+        //}
+        //[Route("GetPrivateKey")]
+        //[HttpGet]
+        //public string GetPrivateKey()
+        //{
+        //    return this.context.GetPrivateKey();
+        //}
         [Route("GetGame")]
-        [HttpGet]
-        public Game GetGame([FromQuery] int GameID)
+        [HttpPost]
+        public Game GetGame([FromQuery] int GameID, [FromBody] User user)
         {
-            return this.context.GetGame(GameID);
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (!currentUser.Equals(user))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                return this.context.GetGame(GameID);
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
         }
         [Route("SendMessage")]
         [HttpPost]
@@ -128,12 +190,21 @@ namespace TopRaceServer.Controllers
         {
             try
             {
-                PlayersInGame p = this.context.PlayersInGames.Where(p => p.Id == message.FromId).FirstOrDefault();
+                PlayersInGame p = message.From;
+                Player player = p.Player;
+                User u = this.context.Users.Where(us => us.Player == player).FirstOrDefault();
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if(!currentUser.Equals(u))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
                 this.context.AddMessage(message);
                 return true;
             }
             catch
             {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
                 return false;
             }
         }
