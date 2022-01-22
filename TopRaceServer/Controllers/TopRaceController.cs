@@ -55,17 +55,10 @@ namespace TopRaceServer.Controllers
                 return false;
             else
             {
-                user.Player = new Player()
-                {                 
-                    PlayerName = user.UserName,
-                    WinsNumber = 0,
-                    LosesNumber = 0,
-                    WinStreak = 0,
-                    ProfilePic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                };
-                
+                this.context.Players.Add(user.Player);         
+                this.context.SaveChanges();
+                user.PlayerId = user.Player.Id;
                 this.context.Users.Add(user);
-               
                 this.context.SaveChanges();
                 return true;
             }
