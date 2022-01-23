@@ -79,7 +79,7 @@ namespace TopRaceServerBL.Models
         {
             foreach (Game g in this.Games) 
             {
-                if (g.StatusId != 2 && g.PrivateKey == key)
+                if (g.StatusId != 3 && g.PrivateKey == key)
                     return true;
             }
             return false;
@@ -88,11 +88,14 @@ namespace TopRaceServerBL.Models
         {
             PlayersInGame playerInGame = new PlayersInGame
             {
-                Player = player,
+                ChatRoom = game.ChatRoom,
+                PlayerId = player.Id,
                 IsHost = isHost,
                 Number = game.PlayersInGames.Count(),
                 Color = GetColor(game),
-                CurrentPos = GetPosition(0, 0)
+                CurrentPos = GetPosition(0, 0),
+                LastMoveTime = DateTime.Now,
+                GameId = game.Id
             };
             return playerInGame;
         }
@@ -127,7 +130,9 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            return this.Games.Include(g => g.ChatRoom).Include(g => g.PlayersInGames).Where(g => g.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.ChatRoom).Include(gm => gm.PlayersInGames).Where(gm => gm.Id == GameID).FirstOrDefault();
+           
+            return g;
         }
         public void AddMessage(Message message)
         {

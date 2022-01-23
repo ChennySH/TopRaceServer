@@ -45,18 +45,14 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("ChatRoom");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
             });
 
             modelBuilder.Entity<Color>(entity =>
             {
                 entity.ToTable("Color");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ColorName)
                     .IsRequired()
@@ -71,9 +67,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("Game");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
 
@@ -114,9 +108,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("GameStatus");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.StatusName)
                     .IsRequired()
@@ -127,9 +119,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("Message");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
 
@@ -159,9 +149,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("MoversInGame");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.EndPosId).HasColumnName("EndPosID");
 
@@ -192,9 +180,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("Player");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.PlayerName)
                     .IsRequired()
@@ -209,9 +195,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("PlayersInGame");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
 
@@ -220,6 +204,8 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.CurrentPosId).HasColumnName("CurrentPosID");
 
                 entity.Property(e => e.GameId).HasColumnName("GameID");
+
+                entity.Property(e => e.LastMoveTime).HasColumnType("datetime");
 
                 entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
 
@@ -258,9 +244,7 @@ namespace TopRaceServerBL.Models
             {
                 entity.ToTable("Position");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.X).HasColumnName("x");
 
@@ -277,9 +261,7 @@ namespace TopRaceServerBL.Models
                 entity.HasIndex(e => e.UserName, "user_username_unique")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Email)
                     .IsRequired()

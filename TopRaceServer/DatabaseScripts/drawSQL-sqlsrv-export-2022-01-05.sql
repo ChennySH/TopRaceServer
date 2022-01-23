@@ -128,3 +128,11 @@ insert GameStatus (StatusName)
 values ('On');
 insert GameStatus (StatusName)
 values ('InActive');
+INSERT Color
+VALUES ('Red', 'https://www.graphicpie.com/wp-content/uploads/2020/11/red-among-us-png.png');
+INSERT Color
+VALUES ('Cyan','https://www.graphicpie.com/wp-content/uploads/2020/11/cyan-among-us-character.png');
+INSERT Color
+VALUES ('Lime','https://www.graphicpie.com/wp-content/uploads/2020/11/among-us-green-png.png');
+INSERT Color
+VALUES ('Yellow', 'https://www.graphicpie.com/wp-content/uploads/2020/11/yellow-among-us.png');
