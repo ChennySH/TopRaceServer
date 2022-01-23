@@ -184,6 +184,7 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public bool SendMessage([FromBody] Message message)
         {
+
             try
             {
                 User currentUser = HttpContext.Session.GetObject<User>("theUser");
