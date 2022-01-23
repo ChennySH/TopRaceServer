@@ -47,15 +47,6 @@ namespace TopRaceServer.Controllers
             }
         }
 
-        [Route("TestPlayer")]
-        [HttpGet]
-        public bool TestPlayer()
-        {
-            Player p = new Player() { LosesNumber = 0, WinStreak = 0, PlayerName = "tal", WinsNumber = 0, ProfilePic = " " };
-            this.context.Players.Add(p);
-            this.context.SaveChanges();
-            return true;
-        }
         [Route("SignUp")]
         [HttpPost]
         public bool SignUp([FromBody] User user)
@@ -135,14 +126,14 @@ namespace TopRaceServer.Controllers
                 game.StatusId = 1;
                 game.PrivateKey = this.context.GetPrivateKey();
                 game.ChatRoom = new ChatRoom();
-                
+
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
-                this.context.PlayersInGames.Update(this.context.AddPlayer(game.HostPlayer, true, game));
+                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, game));
                 this.context.SaveChanges();
                 return game;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
                 return null;

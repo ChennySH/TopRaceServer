@@ -13,11 +13,11 @@ namespace TopRaceServerBL.Models
     {
         public User GetUser(string userNameOrEmail, string password)
         {
-            User u = this.Users.Include(uc => uc.Player).Where(uc => uc.UserName == userNameOrEmail && uc.Password == password).FirstOrDefault();
+            User u = this.Users.Where(uc => uc.UserName == userNameOrEmail && uc.Password == password).FirstOrDefault();
             if (u != null)
                 return u;
             else
-                return this.Users.Include(uc => uc.Player).Where(uc => uc.Email == userNameOrEmail && uc.Password == password).FirstOrDefault();
+                return this.Users.Where(uc => uc.Email == userNameOrEmail && uc.Password == password).FirstOrDefault();
         }
         public bool IsExist(string userName, string email)
         {
@@ -39,18 +39,15 @@ namespace TopRaceServerBL.Models
         }
         public void AddWin(User user)
         {
-            
-            Player player = user.Player;
-            player.WinsNumber++;
-            player.WinStreak++;
+            user.WinsNumber++;
+            user.WinsStreak++;
         }
         public void AddLose(User user)
         {
-            Player player = user.Player;
-            player.LosesNumber++;
-            player.WinStreak = 0;
+            user.LosesNumber++;
+            user.WinsStreak = 0;
         }
-        
+
         public string GetPrivateKey()
         {
             List<char> lst = new List<char>();
@@ -72,24 +69,25 @@ namespace TopRaceServerBL.Models
                     Random rnd = new Random();
                     privateKey += lst[rnd.Next(0, lst.Count())];
                 }
-            }while(this.IsKeyInUse(privateKey));
+            } while (this.IsKeyInUse(privateKey));
             return privateKey;
         }
         public bool IsKeyInUse(string key)
         {
-            foreach (Game g in this.Games) 
+            foreach (Game g in this.Games)
             {
                 if (g.StatusId != 3 && g.PrivateKey == key)
                     return true;
             }
             return false;
         }
-        public PlayersInGame AddPlayer(Player player, bool isHost, Game game)
+        public PlayersInGame CreatePlayerInGame(User user, bool isHost, Game game)
         {
             PlayersInGame playerInGame = new PlayersInGame
             {
                 ChatRoom = game.ChatRoom,
-                PlayerId = player.Id,
+                UserId = user.Id,
+                UserName = user.UserName,
                 IsHost = isHost,
                 Number = game.PlayersInGames.Count(),
                 Color = GetColor(game),
@@ -131,7 +129,7 @@ namespace TopRaceServerBL.Models
         public Game GetGame(int GameID)
         {
             Game g = this.Games.Include(gm => gm.ChatRoom).Include(gm => gm.PlayersInGames).Where(gm => gm.Id == GameID).FirstOrDefault();
-           
+
             return g;
         }
         public void AddMessage(Message message)

@@ -14,6 +14,7 @@ namespace TopRaceServerBL.Models
 
         public int Id { get; set; }
         public string ColorName { get; set; }
+        public string ColorCode { get; set; }
         public string PicLink { get; set; }
 
         public virtual ICollection<PlayersInGame> PlayersInGames { get; set; }
