@@ -123,7 +123,7 @@ namespace TopRaceServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
                 }
-                game.StatusId = 1;
+                game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
                 game.PrivateKey = this.context.GetPrivateKey();
                 game.ChatRoom = new ChatRoom();
 

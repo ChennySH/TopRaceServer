@@ -88,6 +88,7 @@ namespace TopRaceServerBL.Models
                 ChatRoom = game.ChatRoom,
                 UserId = user.Id,
                 UserName = user.UserName,
+                ProfilePic = user.ProfilePic,
                 IsHost = isHost,
                 Number = game.PlayersInGames.Count(),
                 Color = GetColor(game),

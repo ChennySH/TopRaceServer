@@ -3,7 +3,7 @@ GO
 USE TopRaceDB
 CREATE TABLE "User"(
     "id" INT IDENTITY NOT NULL,
-    "UserName" NVARCHAR(255) NOT NULL,
+    "UserName"  NVARCHAR(255) NOT NULL,
     "Email" NVARCHAR(255) NOT NULL,
     "Password" NVARCHAR(255) NOT NULL,
     "PhoneNumber" NVARCHAR(255) NOT NULL,
@@ -35,6 +35,7 @@ CREATE TABLE "PlayersInGame"(
     "id" INT IDENTITY NOT NULL,
     "UserID" INT NOT NULL,
     "UserName" NVARCHAR(255) NOT NULL,
+    "ProfilePic" NVARCHAR(255) NOT NULL,
     "IsHost" BIT NOT NULL,
     "Number" INT NOT NULL,
     "ColorID" INT NOT NULL,
@@ -113,7 +114,7 @@ ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
 ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
-	GO
+		GO
 use TopRaceDB 
 insert GameStatus (StatusName)
 values ('Wait');
@@ -129,5 +130,7 @@ INSERT Color
 VALUES ('Lime', '#00FF00','https://www.graphicpie.com/wp-content/uploads/2020/11/among-us-green-png.png');
 INSERT Color
 VALUES ('Yellow', '#FFFF00', 'https://www.graphicpie.com/wp-content/uploads/2020/11/yellow-among-us.png');
+INSERT Color
+VALUES ('Orange', '#FFA500', 'https://i.pinimg.com/originals/ee/0b/83/ee0b8322db7fb7939469a67e889318d4.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');

@@ -195,6 +195,10 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.LastMoveTime).HasColumnType("datetime");
 
+                entity.Property(e => e.ProfilePic)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.Property(e => e.UserName)
