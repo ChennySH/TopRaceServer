@@ -129,14 +129,15 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            Game g = this.Games.Include(gm => gm.ChatRoom).Include(gm => gm.PlayersInGames).Where(gm => gm.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.ChatRoom).ThenInclude(ch=>ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm=>gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
 
             return g;
         }
         public void AddMessage(Message message)
         {
-            ChatRoom chatRoom = this.ChatRooms.Where(c => c.Id == message.ChatRoomId).FirstOrDefault();
-            chatRoom.Messages.Add(message);
+            // ChatRoom chatRoom = this.ChatRooms.Where(c => c.Id == message.ChatRoom.Id).FirstOrDefault();
+            //chatRoom.Messages.Add(message);
+            this.Messages.Update(message);
             SaveChanges();
         }
     }

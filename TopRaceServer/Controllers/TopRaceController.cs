@@ -187,7 +187,7 @@ namespace TopRaceServer.Controllers
                 this.context.AddMessage(message);
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
                 return false;
