@@ -3,7 +3,7 @@ GO
 USE TopRaceDB
 CREATE TABLE "User"(
     "id" INT IDENTITY NOT NULL,
-    "UserName"  NVARCHAR(255) NOT NULL,
+    "UserName" NVARCHAR(255) NOT NULL,
     "Email" NVARCHAR(255) NOT NULL,
     "Password" NVARCHAR(255) NOT NULL,
     "PhoneNumber" NVARCHAR(255) NOT NULL,
@@ -24,7 +24,6 @@ CREATE TABLE "Game"(
     "IsPrivate" BIT NOT NULL,
     "PrivateKey" NVARCHAR(255) NOT NULL,
     "HostUserID" INT NOT NULL,
-    "CurrentTurn" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "StatusID" INT NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL
@@ -37,12 +36,12 @@ CREATE TABLE "PlayersInGame"(
     "UserName" NVARCHAR(255) NOT NULL,
     "ProfilePic" NVARCHAR(255) NOT NULL,
     "IsHost" BIT NOT NULL,
-    "Number" INT NOT NULL,
     "ColorID" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "GameID" INT NOT NULL,
     "CurrentPosID" INT NOT NULL,
-    "LastMoveTime" DATETIME NOT NULL
+    "LastMoveTime" DATETIME NOT NULL,
+    "EnterTime" DATETIME NOT NULL
 );
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_id_primary" PRIMARY KEY("id");
@@ -114,7 +113,7 @@ ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
 ALTER TABLE
     "MoversInGame" ADD CONSTRAINT "moversingame_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
-		GO
+			GO
 use TopRaceDB 
 insert GameStatus (StatusName)
 values ('Wait');

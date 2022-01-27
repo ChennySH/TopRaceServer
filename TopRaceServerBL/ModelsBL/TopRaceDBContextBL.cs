@@ -90,7 +90,7 @@ namespace TopRaceServerBL.Models
                 UserName = user.UserName,
                 ProfilePic = user.ProfilePic,
                 IsHost = isHost,
-                Number = game.PlayersInGames.Count(),
+                EnterTime = DateTime.Now,
                 Color = GetColor(game),
                 CurrentPos = GetPosition(0, 0),
                 LastMoveTime = DateTime.Now,

@@ -191,6 +191,8 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.CurrentPosId).HasColumnName("CurrentPosID");
 
+                entity.Property(e => e.EnterTime).HasColumnType("datetime");
+
                 entity.Property(e => e.GameId).HasColumnName("GameID");
 
                 entity.Property(e => e.LastMoveTime).HasColumnType("datetime");
