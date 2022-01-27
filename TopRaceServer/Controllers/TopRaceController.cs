@@ -193,5 +193,33 @@ namespace TopRaceServer.Controllers
                 return false;
             }
         }
+        [Route("JoinPrivateGame")]
+        [HttpGet]
+        public Game JoinPrivateGame([FromQuery] string privateKey)
+        {
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                Game game = this.context.GetGameFromKey(privateKey);
+                if (game == null)
+                {
+                    return null;
+                }
+                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(currentUser, false, game));
+                game.LastUpdateTime = DateTime.Now;
+                this.context.SaveChanges();
+                return game;
+            }
+            catch(Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                return null;
+            }
+        }
     }
 }

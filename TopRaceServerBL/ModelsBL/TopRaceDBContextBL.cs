@@ -129,7 +129,13 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            Game g = this.Games.Include(gm => gm.ChatRoom).ThenInclude(ch=>ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm=>gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch=>ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm=>gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
+
+            return g;
+        }
+        public Game GetGameFromKey(string privateKey)
+        {
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && gm.PlayersInGames.Count < 4).FirstOrDefault();
 
             return g;
         }
