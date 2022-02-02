@@ -89,7 +89,7 @@ namespace TopRaceServer.Controllers
             }
             catch
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
             }
         }
         [Route("AddLose")]
@@ -108,7 +108,7 @@ namespace TopRaceServer.Controllers
             }
             catch
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
             }
         }
         [Route("HostGame")]
@@ -135,7 +135,7 @@ namespace TopRaceServer.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return null;
             }
         }
@@ -167,7 +167,7 @@ namespace TopRaceServer.Controllers
             }
             catch
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return null;
             }
         }
@@ -189,7 +189,7 @@ namespace TopRaceServer.Controllers
             }
             catch(Exception e)
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return false;
             }
         }
@@ -217,8 +217,34 @@ namespace TopRaceServer.Controllers
             }
             catch(Exception e)
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return null;
+            }
+        }
+        [Route("GetAllColors")]
+        [HttpGet]
+        public List<Color> GetAllColors()
+        {
+            return this.context.Colors.ToList();
+        }
+        [Route("UpdatePlayer")]
+        [HttpPost]
+        public void UpdatePlayer([FromBody] PlayersInGame playerInGame)
+        {
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return;
+                }
+                this.context.PlayersInGames.Update(playerInGame);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return;
             }
         }
     }
