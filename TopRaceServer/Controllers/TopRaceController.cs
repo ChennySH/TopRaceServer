@@ -240,6 +240,7 @@ namespace TopRaceServer.Controllers
                     return;
                 }
                 this.context.PlayersInGames.Update(playerInGame);
+                this.context.SaveChanges();
             }
             catch (Exception e)
             {
