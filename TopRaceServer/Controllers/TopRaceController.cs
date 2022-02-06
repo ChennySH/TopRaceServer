@@ -240,6 +240,11 @@ namespace TopRaceServer.Controllers
                     return;
                 }
                 this.context.PlayersInGames.Update(playerInGame);
+                var change = this.context.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
+                    foreach (var c in change)
+                {
+                    c.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                }
                 this.context.SaveChanges();
             }
             catch (Exception e)

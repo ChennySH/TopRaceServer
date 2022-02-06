@@ -9,7 +9,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Wwwroot\" />
+    <Folder Include="Wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Wwwroot\Images\CyanCrewmate.png" />
+    <None Include="Wwwroot\Images\LimeCrewmate.png" />
+    <None Include="Wwwroot\Images\OrangeCrewmate.png" />
+    <None Include="Wwwroot\Images\PurpleCrewmate.png" />
+    <None Include="Wwwroot\Images\RedCrewmate.png" />
+    <None Include="Wwwroot\Images\YellowCrewmate.png" />
   </ItemGroup>
 
   <ItemGroup>

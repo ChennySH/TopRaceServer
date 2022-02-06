@@ -122,14 +122,14 @@ values ('On');
 insert GameStatus (StatusName)
 values ('InActive');
 INSERT Color
-VALUES ('Red', '#FF0000', 'https://www.graphicpie.com/wp-content/uploads/2020/11/red-among-us-png.png');
+VALUES ('Red', '#FF0000', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Red_%281%29.png');
 INSERT Color
-VALUES ('Cyan', '#00FFFF', 'https://www.graphicpie.com/wp-content/uploads/2020/11/cyan-among-us-character.png');
+VALUES ('Cyan', '#00FFFF', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Cyan_%281%29.png');
 INSERT Color
-VALUES ('Lime', '#00FF00','https://www.graphicpie.com/wp-content/uploads/2020/11/among-us-green-png.png');
+VALUES ('Lime', '#00FF00','https://among-us.fandom.com/pt-br/wiki/Branco?file=Lime_%281%29.png');
 INSERT Color
-VALUES ('Yellow', '#FFFF00', 'https://www.graphicpie.com/wp-content/uploads/2020/11/yellow-among-us.png');
+VALUES ('Yellow', '#FFFF00', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Yellow_%281%29.png');
 INSERT Color
-VALUES ('Orange', '#FFA500', 'https://i.pinimg.com/originals/ee/0b/83/ee0b8322db7fb7939469a67e889318d4.png');
+VALUES ('Orange', '#FFA500', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Orange_%281%29.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
