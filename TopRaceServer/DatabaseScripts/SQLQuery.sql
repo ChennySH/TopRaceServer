@@ -122,14 +122,14 @@ values ('On');
 insert GameStatus (StatusName)
 values ('InActive');
 INSERT Color
-VALUES ('Red', '#FF0000', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Red_%281%29.png');
+VALUES ('Red', '#FF0000', 'RedCrewmate.png');
 INSERT Color
-VALUES ('Cyan', '#00FFFF', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Cyan_%281%29.png');
+VALUES ('Cyan', '#00FFFF', 'CyanCrewmate.png');
 INSERT Color
-VALUES ('Lime', '#00FF00','https://among-us.fandom.com/pt-br/wiki/Branco?file=Lime_%281%29.png');
+VALUES ('Lime', '#00FF00','LimeCrewmate.png');
 INSERT Color
-VALUES ('Yellow', '#FFFF00', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Yellow_%281%29.png');
+VALUES ('Yellow', '#FFFF00', 'YellowCrewmate.png');
 INSERT Color
-VALUES ('Orange', '#FFA500', 'https://among-us.fandom.com/pt-br/wiki/Branco?file=Orange_%281%29.png');
+VALUES ('Orange', '#FFA500', 'OrangeCrewmate.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
