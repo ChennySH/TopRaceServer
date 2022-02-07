@@ -124,12 +124,26 @@ values ('InActive');
 INSERT Color
 VALUES ('Red', '#FF0000', 'RedCrewmate.png');
 INSERT Color
-VALUES ('Cyan', '#00FFFF', 'CyanCrewmate.png');
+VALUES ('Blue', '#0000FF', 'BlueCrewmate.png');
 INSERT Color
-VALUES ('Lime', '#00FF00','LimeCrewmate.png');
+VALUES ('Green', '#008000', 'GreenCrewmate.png');
+INSERT Color
+VALUES ('Pink', '#FF1493', 'PinkCrewmate.png');
+INSERT Color
+VALUES ('Orange', '#FFA500', 'OrangeCrewmate.png');
 INSERT Color
 VALUES ('Yellow', '#FFFF00', 'YellowCrewmate.png');
 INSERT Color
-VALUES ('Orange', '#FFA500', 'OrangeCrewmate.png');
+VALUES ('Black', '#000000', 'BlackCrewmate.png');
+INSERT Color
+VALUES ('White', '#FFFFFF', 'WhiteCrewmate.png');
+INSERT Color
+VALUES ('Purple', '#800080', 'PurpleCrewmate.png');
+INSERT Color
+VALUES ('Brown', '#A52A2A', 'BrownCrewmate.png');
+INSERT Color
+VALUES ('Cyan', '#00FFFF', 'CyanCrewmate.png');
+INSERT Color
+VALUES ('Lime', '#00FF00','LimeCrewmate.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');

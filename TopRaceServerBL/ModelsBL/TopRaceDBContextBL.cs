@@ -144,7 +144,24 @@ namespace TopRaceServerBL.Models
             // ChatRoom chatRoom = this.ChatRooms.Where(c => c.Id == message.ChatRoom.Id).FirstOrDefault();
             //chatRoom.Messages.Add(message);
             this.Messages.Update(message);
+            var change = this.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
+            foreach (var c in change)
+            {
+                c.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            }
             SaveChanges();
+        }
+        public bool IsColorAvailable(PlayersInGame player)
+        {
+            Game game = this.Games.Include(g => g.PlayersInGames).Where(g => g.Id == player.GameId).FirstOrDefault();
+            if (game == null)
+                return false;
+            foreach(PlayersInGame pl in game.PlayersInGames)
+            {
+                if (pl.Id != player.Id && pl.ColorId == player.ColorId)
+                    return false;
+            }
+            return true;
         }
     }
 }

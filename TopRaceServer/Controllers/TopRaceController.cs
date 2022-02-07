@@ -175,7 +175,6 @@ namespace TopRaceServer.Controllers
         [HttpPost]
         public bool SendMessage([FromBody] Message message)
         {
-
             try
             {
                 User currentUser = HttpContext.Session.GetObject<User>("theUser");
@@ -229,7 +228,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("UpdatePlayer")]
         [HttpPost]
-        public void UpdatePlayer([FromBody] PlayersInGame playerInGame)
+        public bool UpdatePlayer([FromBody] PlayersInGame playerInGame)
         {
             try
             {
@@ -237,21 +236,24 @@ namespace TopRaceServer.Controllers
                 if (currentUser == null)
                 {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return;
+                    return false;
                 }
+                if (!this.context.IsColorAvailable(playerInGame))
+                    return false;
                 this.context.PlayersInGames.Update(playerInGame);
                 var change = this.context.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
-                    foreach (var c in change)
+                foreach (var c in change)
                 {
                     c.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
                 }
                 this.context.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
-                return;
+                return false;
             }
-        }
+        }        
     }
 }
