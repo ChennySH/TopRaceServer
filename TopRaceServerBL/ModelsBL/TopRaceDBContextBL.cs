@@ -158,7 +158,7 @@ namespace TopRaceServerBL.Models
                 return false;
             foreach(PlayersInGame pl in game.PlayersInGames)
             {
-                if (pl.Id != player.Id && pl.ColorId == player.ColorId)
+                if (pl.Id != player.Id && pl.ColorId == player.Color.Id)
                     return false;
             }
             return true;
