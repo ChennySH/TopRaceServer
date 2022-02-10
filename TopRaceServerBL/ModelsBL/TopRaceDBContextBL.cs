@@ -163,5 +163,20 @@ namespace TopRaceServerBL.Models
             }
             return true;
         }
+        public bool CloseGame (int gameID)
+        {
+            try
+            {
+                Game g = this.Games.Where(g => g.Id == gameID).FirstOrDefault();
+                g.Status = this.GameStatuses.Where(s => s.Id == 3).FirstOrDefault();
+                this.Update(g);
+                this.SaveChanges();
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
     }
 }

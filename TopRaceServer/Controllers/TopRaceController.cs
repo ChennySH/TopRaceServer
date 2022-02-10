@@ -254,6 +254,28 @@ namespace TopRaceServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return false;
             }
-        }        
+        }
+        [Route("CloseGame")]
+        [HttpGet]
+        public bool CloseGame ([FromQuery] int gameID)
+        {
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+                bool isClosed = this.CloseGame(gameID);
+                return isClosed;
+            }
+            catch(Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return false;
+            }
+
+        }
     }
 }
