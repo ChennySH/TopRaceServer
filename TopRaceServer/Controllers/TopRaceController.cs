@@ -267,7 +267,7 @@ namespace TopRaceServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return false;
                 }
-                bool isClosed = this.CloseGame(gameID);
+                bool isClosed = this.context.CloseGame(gameID);
                 return isClosed;
             }
             catch(Exception e)
