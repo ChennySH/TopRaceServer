@@ -83,9 +83,10 @@ namespace TopRaceServerBL.Models
         }
         public PlayersInGame CreatePlayerInGame(User user, bool isHost, Game game)
         {
+            //this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             PlayersInGame playerInGame = new PlayersInGame
             {
-                ChatRoom = game.ChatRoom,
+                ChatRoomId = game.ChatRoomId,
                 UserId = user.Id,
                 UserName = user.UserName,
                 ProfilePic = user.ProfilePic,
@@ -100,12 +101,12 @@ namespace TopRaceServerBL.Models
         }
         public Color GetColor(Game game)
         {
-            foreach (Color color in Colors)
+            foreach (Color color in this.Colors)
             {
                 bool isInUse = false;
                 foreach (PlayersInGame p in game.PlayersInGames)
                 {
-                    if (p.Color == color)
+                    if (p.ColorId == color.Id)
                         isInUse = true;
                 }
                 if (!isInUse)
@@ -129,13 +130,13 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch=>ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm=>gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch=>ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm=>gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
 
             return g;
         }
         public Game GetGameFromKey(string privateKey)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && gm.PlayersInGames.Count < 4).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m=>m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && gm.PlayersInGames.Count < 4).FirstOrDefault();
 
             return g;
         }

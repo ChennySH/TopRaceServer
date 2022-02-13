@@ -11,19 +11,6 @@ namespace TopRaceServerBL.Models
         {
             Messages = new HashSet<Message>();
         }
-        public PlayersInGame(PlayersInGame playersInGame)
-        {
-            Messages = new HashSet<Message>();
-            Id = playersInGame.Id;
-            UserId = playersInGame.UserId;
-            UserName = playersInGame.UserName;
-            ProfilePic = playersInGame.ProfilePic;
-            IsHost = playersInGame.IsHost;
-            ColorId = playersInGame.ColorId;
-            ChatRoomId = playersInGame.ChatRoomId;
-            GameId = playersInGame.GameId;
-            CurrentPosId = playersInGame.CurrentPosId;
-        }
         public int Id { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; }

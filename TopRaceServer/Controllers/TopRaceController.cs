@@ -204,12 +204,17 @@ namespace TopRaceServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
                 }
+                
                 Game game = this.context.GetGameFromKey(privateKey);
                 if (game == null)
                 {
                     return null;
                 }
-                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(currentUser, false, game));
+
+                
+                PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
+                this.context.PlayersInGames.Add(p);
+                //this.context.Entry(p).CurrentValues.SetValues(p);
                 game.LastUpdateTime = DateTime.Now;
                 this.context.SaveChanges();
                 return game;
@@ -240,7 +245,7 @@ namespace TopRaceServer.Controllers
                 }
                 if (!this.context.IsColorAvailable(playerInGame))
                     return false;
-                this.context.PlayersInGames.Update(new PlayersInGame( playerInGame));
+                this.context.PlayersInGames.Update(playerInGame);
                 var change = this.context.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
                 foreach (var c in change)
                 {
