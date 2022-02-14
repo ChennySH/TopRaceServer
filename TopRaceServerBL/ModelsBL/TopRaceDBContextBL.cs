@@ -169,8 +169,9 @@ namespace TopRaceServerBL.Models
             try
             {
                 Game g = this.Games.Where(g => g.Id == gameID).FirstOrDefault();
-                g.Status = this.GameStatuses.Where(s => s.Id == 3).FirstOrDefault();
-                this.Update(g);
+                g.StatusId = 3;
+                this.Entry(g).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                //this.Update(g);
                 this.SaveChanges();
                 return true;
             }

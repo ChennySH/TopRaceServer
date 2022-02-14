@@ -49,7 +49,7 @@ namespace TopRaceServer
             string connectionString = this.Configuration.GetConnectionString("TopRaceDB");
 
             services.AddDbContext<TopRaceDBContext>(options => options
-                                                                .UseSqlServer(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+                                                                .UseSqlServer(connectionString));
             //.UseLazyLoadingProxies());
             #endregion
         }

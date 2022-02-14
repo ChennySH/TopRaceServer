@@ -213,9 +213,12 @@ namespace TopRaceServer.Controllers
 
                 
                 PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
-                this.context.PlayersInGames.Add(p);
+                this.context.ChangeTracker.Clear();
+                this.context.Entry(p).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                //this.context.PlayersInGames.Add(p);
                 //this.context.Entry(p).CurrentValues.SetValues(p);
                 game.LastUpdateTime = DateTime.Now;
+                this.context.Entry(game).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 this.context.SaveChanges();
                 return game;
             }
@@ -245,12 +248,15 @@ namespace TopRaceServer.Controllers
                 }
                 if (!this.context.IsColorAvailable(playerInGame))
                     return false;
-                this.context.PlayersInGames.Update(playerInGame);
-                var change = this.context.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
-                foreach (var c in change)
-                {
-                    c.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-                }
+                //PlayersInGame pl = this.context.PlayersInGames.Where(p => p.Id == playerInGame.Id).FirstOrDefault();
+                //pl.SetValues(playerInGame);
+                this.context.ChangeTracker.Clear();
+                this.context.Entry(playerInGame).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                //var change = this.context.ChangeTracker.Entries<TopRaceServerBL.Models.Color>().Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified);
+                //foreach (var c in change)
+                //{
+                //    c.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                //}
                 this.context.SaveChanges();
                 return true;
             }
