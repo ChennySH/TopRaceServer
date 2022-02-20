@@ -91,6 +91,8 @@ namespace TopRaceServerBL.Models
                 UserName = user.UserName,
                 ProfilePic = user.ProfilePic,
                 IsHost = isHost,
+                IsInGame = true,
+                DidPlayInGame = false,
                 EnterTime = DateTime.Now,
                 Color = GetColor(game),
                 CurrentPos = GetPosition(0, 0),
@@ -171,6 +173,12 @@ namespace TopRaceServerBL.Models
                 Game g = this.Games.Where(g => g.Id == gameID).FirstOrDefault();
                 g.StatusId = 3;
                 this.Entry(g).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                foreach (PlayersInGame pl in g.PlayersInGames)
+                {
+                    pl.IsInGame = false;
+                    this.Entry(pl).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                }
+
                 //this.Update(g);
                 this.SaveChanges();
                 return true;

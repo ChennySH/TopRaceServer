@@ -36,6 +36,8 @@ CREATE TABLE "PlayersInGame"(
     "UserName" NVARCHAR(255) NOT NULL,
     "ProfilePic" NVARCHAR(255) NOT NULL,
     "IsHost" BIT NOT NULL,
+    "IsInGame" BIT NOT NULL,
+    "DidPlayInGame" BIT NOT NULL,
     "ColorID" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "GameID" INT NOT NULL,
