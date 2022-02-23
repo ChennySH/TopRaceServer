@@ -211,13 +211,16 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
 
-                
-                PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
                 this.context.ChangeTracker.Clear();
-                this.context.Entry(p).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
+                this.context.Add(p);
+                this.context.SaveChanges();
+                this.context.ChangeTracker.Clear();
+                //this.context.Entry(p).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                 //this.context.PlayersInGames.Add(p);
                 //this.context.Entry(p).CurrentValues.SetValues(p);
                 game.LastUpdateTime = DateTime.Now;
+                //this.context.Update(game);
                 this.context.Entry(game).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 this.context.SaveChanges();
                 return game;

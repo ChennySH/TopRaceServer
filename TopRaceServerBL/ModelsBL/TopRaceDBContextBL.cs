@@ -94,14 +94,14 @@ namespace TopRaceServerBL.Models
                 IsInGame = true,
                 DidPlayInGame = false,
                 EnterTime = DateTime.Now,
-                Color = GetColor(game),
-                CurrentPos = GetPosition(0, 0),
+                ColorId = GetColorID(game),
+                CurrentPosId = GetPositionID(0, 0),
                 LastMoveTime = DateTime.Now,
                 GameId = game.Id
             };
             return playerInGame;
         }
-        public Color GetColor(Game game)
+        public int GetColorID(Game game)
         {
             foreach (Color color in this.Colors)
             {
@@ -112,15 +112,15 @@ namespace TopRaceServerBL.Models
                         isInUse = true;
                 }
                 if (!isInUse)
-                    return color;
+                    return color.Id;
             }
-            return null;
+            return 0;
         }
-        public Position GetPosition(int x, int y)
+        public int GetPositionID(int x, int y)
         {
             Position p = this.Positions.Where(p => p.X == x && p.Y == y).FirstOrDefault();
             if (p != null)
-                return p;
+                return p.Id;
             Position pos = new Position
             {
                 X = x,
@@ -128,7 +128,7 @@ namespace TopRaceServerBL.Models
             };
             this.Positions.Add(pos);
             SaveChanges();
-            return pos;
+            return pos.Id;
         }
         public Game GetGame(int GameID)
         {
