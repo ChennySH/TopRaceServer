@@ -210,12 +210,9 @@ namespace TopRaceServer.Controllers
                 {
                     return null;
                 }
-
-                this.context.ChangeTracker.Clear();
                 PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
-                this.context.Add(p);
+                this.context.PlayersInGames.Update(p);
                 this.context.SaveChanges();
-                this.context.ChangeTracker.Clear();
                 //this.context.Entry(p).State = Microsoft.EntityFrameworkCore.EntityState.Added;
                 //this.context.PlayersInGames.Add(p);
                 //this.context.Entry(p).CurrentValues.SetValues(p);
@@ -290,6 +287,37 @@ namespace TopRaceServer.Controllers
                 return false;
             }
 
+        }
+        [Route("KickOut")]
+        [HttpGet]
+        public bool KickOut([FromQuery] int gameID, [FromQuery] int playerInGameID)
+        {
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+                Game game = this.context.GetGame(gameID);
+                if(currentUser.Id != game.HostUserId)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+                PlayersInGame pl = this.context.PlayersInGames.Where(p => p.Id == playerInGameID).FirstOrDefault();
+                this.context.ChangeTracker.Clear();
+                pl.IsInGame = false;
+                this.context.Entry(pl).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                this.context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return false;
+            }
         }
     }
 }
