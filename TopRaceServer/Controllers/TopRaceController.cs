@@ -290,6 +290,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("KickOut")]
         [HttpGet]
+
         public bool KickOut([FromQuery] int gameID, [FromQuery] int playerInGameID)
         {
             try
