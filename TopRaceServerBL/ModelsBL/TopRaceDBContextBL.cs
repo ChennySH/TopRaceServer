@@ -189,10 +189,7 @@ namespace TopRaceServerBL.Models
                 return false;
             }
         }
-        public bool KickOut(int GameID, int PlayerID)
-        {
 
-        }
     }
     
 }
