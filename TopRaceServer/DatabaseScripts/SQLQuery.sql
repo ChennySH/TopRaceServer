@@ -149,3 +149,7 @@ INSERT Color
 VALUES ('Lime', '#00FF00','LimeCrewmate.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
+INSERT [User]
+VALUES('User2', 't@g2', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
+INSERT [User]
+VALUES('User3', 't@g3', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');

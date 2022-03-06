@@ -163,7 +163,9 @@ namespace TopRaceServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
                 }
-                return this.context.GetGame(GameID);
+               
+                Game g = this.context.GetGame(GameID);
+                return g;
             }
             catch
             {
