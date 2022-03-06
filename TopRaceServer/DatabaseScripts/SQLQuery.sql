@@ -150,6 +150,6 @@ VALUES ('Lime', '#00FF00','LimeCrewmate.png');
 INSERT [User]
 VALUES('User1', 't@g', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
 INSERT [User]
-VALUES('User2', 't@g2', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
+VALUES('User2', 't@g2', '12345678', '0500000000', 0,0,0,'https://static01.nyt.com/images/2021/09/21/science/09tb-butterflies-1/09tb-butterflies-1-mobileMasterAt3x.jpg');
 INSERT [User]
-VALUES('User3', 't@g3', '12345678', '0500000000', 0,0,0,'https://www.eekwi.org/sites/default/files/styles/original/public/2019-11/greysquirrel.jpg?itok=xGaAUTUj');
+VALUES('User3', 't@g3', '12345678', '0500000000', 0,0,0,'https://ip.index.hr/remote/indexnew.s3.index.hr/989fd20a-b4d3-4f81-b1a3-0d4bdae4b0f4-46962987_l%20(1).jpg');

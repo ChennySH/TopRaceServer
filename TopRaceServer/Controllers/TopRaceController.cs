@@ -212,6 +212,11 @@ namespace TopRaceServer.Controllers
                 {
                     return null;
                 }
+                foreach(PlayersInGame pl in game.PlayersInGames)
+                {
+                    if (pl.UserId == currentUser.Id)
+                        return null;
+                }
                 PlayersInGame p = this.context.CreatePlayerInGame(currentUser, false, game);
                 this.context.PlayersInGames.Update(p);
                 this.context.SaveChanges();

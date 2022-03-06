@@ -108,7 +108,7 @@ namespace TopRaceServerBL.Models
                 bool isInUse = false;
                 foreach (PlayersInGame p in game.PlayersInGames)
                 {
-                    if (p.ColorId == color.Id)
+                    if (p.ColorId == color.Id && p.IsInGame)
                         isInUse = true;
                 }
                 if (!isInUse)
@@ -160,7 +160,7 @@ namespace TopRaceServerBL.Models
                 return false;
             foreach(PlayersInGame pl in game.PlayersInGames)
             {
-                if (pl.Id != player.Id && pl.ColorId == player.Color.Id)
+                if (pl.Id != player.Id && pl.IsInGame && pl.ColorId == player.ColorId)
                     return false;
             }
             return true;
