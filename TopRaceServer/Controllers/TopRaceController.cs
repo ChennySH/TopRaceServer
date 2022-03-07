@@ -46,6 +46,31 @@ namespace TopRaceServer.Controllers
                 return null;
             }
         }
+        [Route("LogOut")]
+        [HttpGet]
+        public bool LogOut()
+        {
+            try
+            {
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return false;
+                }
+                HttpContext.Session.SetObject("theUser", null);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return false;
+
+            }
+        }
 
         [Route("SignUp")]
         [HttpPost]
@@ -309,11 +334,6 @@ namespace TopRaceServer.Controllers
                     return false;
                 }
                 Game game = this.context.GetGame(gameID);
-                if(currentUser.Id != game.HostUserId)
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return false;
-                }
                 PlayersInGame pl = this.context.PlayersInGames.Where(p => p.Id == playerInGameID).FirstOrDefault();
                 this.context.ChangeTracker.Clear();
                 pl.IsInGame = false;
