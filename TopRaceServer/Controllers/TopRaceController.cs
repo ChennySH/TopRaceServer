@@ -349,7 +349,7 @@ namespace TopRaceServer.Controllers
                 }
                 Game g = this.context.GetGame(gameID);
                 // creating the game's board
-                g.CreateGameBoard();
+                g.Board = this.context.CreateGameBoard(g);
                 // getting the number of player in the game
                 int playersNum = this.context.GetPlayersNumber(gameID);
                 // choosing a random starter

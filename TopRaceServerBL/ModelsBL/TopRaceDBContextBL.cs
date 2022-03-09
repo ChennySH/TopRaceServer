@@ -203,7 +203,7 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
-        public void CreateGameBoard(Game game)
+        public string CreateGameBoard(Game game)
         {
             MoversInGame[,] board = new MoversInGame[10, 10];
             MoversInGame[] ladders = new MoversInGame[8];
@@ -378,7 +378,7 @@ namespace TopRaceServerBL.Models
                 ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
                 PropertyNameCaseInsensitive = true
             };
-            game.Board = JsonSerializer.Serialize(board, options);
+            return JsonSerializer.Serialize(board, options);
 
         }
         public bool CheckMover(MoversInGame[]arr, MoversInGame mover)
