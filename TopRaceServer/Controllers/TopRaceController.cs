@@ -351,17 +351,24 @@ namespace TopRaceServer.Controllers
         [HttpGet]
         public Game StartGame(int GameID)
         {
-            User currentUser = HttpContext.Session.GetObject<User>("theUser");
-            if (currentUser == null)
+            try
             {
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                Game g = this.context.GetGame(GameID);
+                g.CreateGameBoard();
+                this.context.Games.Update(g);
+                this.context.SaveChanges();
+                return g;
+            }
+            catch(Exception e)
+            {
                 return null;
             }
-            Game g = this.context.GetGame(GameID);
-            g.CreateGameBoard();
-            this.context.Games.Update(g);
-            this.context.SaveChanges();
-            return g;
         }
         [Route("Play")]
         [HttpGet]
