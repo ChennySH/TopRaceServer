@@ -25,7 +25,7 @@ namespace TopRaceServerBL.Models
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    MoversInGame mover = new MoversInGame 
+                    MoversInGame mover = new MoversInGame(); 
                     foreach(MoversInGame m in ladders)
                     {
                         if(m.StartPos.X == j && m.StartPos.Y == i)
