@@ -409,6 +409,19 @@ namespace TopRaceServerBL.Models
             }
             return counter;
         }
+        public int GetPlayersNumber(int gameID)
+        {
+            Game g = this.Games.Include(gm => gm.PlayersInGames).Where(gm => gm.Id == gameID).FirstOrDefault();
+            int counter = 0;
+            foreach (PlayersInGame pl in g.PlayersInGames)
+            {
+                if (pl.IsInGame)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
     }
     
 }

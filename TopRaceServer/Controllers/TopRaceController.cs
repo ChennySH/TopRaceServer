@@ -164,18 +164,6 @@ namespace TopRaceServer.Controllers
                 return null;
             }
         }
-        //[Route("GetGameStatus")]
-        //[HttpGet]
-        //public GameStatus GetGameStatus([FromQuery] int statusId)
-        //{
-        //    return this.context.GameStatuses.Where(s => s.Id == statusId).FirstOrDefault();
-        //}
-        //[Route("GetPrivateKey")]
-        //[HttpGet]
-        //public string GetPrivateKey()
-        //{
-        //    return this.context.GetPrivateKey();
-        //}
         [Route("GetGame")]
         [HttpGet]
         public Game GetGame([FromQuery] int GameID)
@@ -349,7 +337,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("StartGame")]
         [HttpGet]
-        public Game StartGame(int GameID)
+        public Game StartGame(int gameID)
         {
             try
             {
@@ -359,8 +347,28 @@ namespace TopRaceServer.Controllers
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
                 }
-                Game g = this.context.GetGame(GameID);
+                Game g = this.context.GetGame(gameID);
+                // creating the game's board
                 g.CreateGameBoard();
+                // getting the number of player in the game
+                int playersNum = this.context.GetPlayersNumber(gameID);
+                // choosing a random starter
+                Random rnd = new Random();
+                int firstNum = rnd.Next(1, playersNum + 1);
+                // setting the starter
+                int counter = 0;
+                foreach(PlayersInGame pl in g.PlayersInGames) 
+                {
+                    if (pl.IsInGame)
+                    {
+                        counter++;
+                    }
+                    if(counter == firstNum)
+                    {
+                        g.CurrentPlayerInTurnId = pl.Id;
+                    }
+                 
+                }
                 this.context.Games.Update(g);
                 this.context.SaveChanges();
                 return g;
