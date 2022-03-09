@@ -8,10 +8,6 @@ namespace TopRaceServerBL.Models
 {
     public partial class PlayersInGame
     {
-        public void SetValues(PlayersInGame pl)
-        {
-            this.ColorId = pl.ColorId;
-            this.CurrentPosId = pl.CurrentPosId;
-        }
+
     }
 }

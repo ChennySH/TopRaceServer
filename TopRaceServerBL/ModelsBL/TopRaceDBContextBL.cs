@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TopRaceServerBL.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace TopRaceServerBL.Models
@@ -130,6 +132,10 @@ namespace TopRaceServerBL.Models
             SaveChanges();
             return pos.Id;
         }
+        public Position GetPositionByID(int id)
+        {
+            return this.Positions.Where(p => p.Id == id).FirstOrDefault();
+        }
         public Game GetGame(int GameID)
         {
             Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
@@ -137,7 +143,7 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGameFromKey(string privateKey)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && gm.PlayersInGames.Count < 4).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
 
             return g;
         }
@@ -188,7 +194,214 @@ namespace TopRaceServerBL.Models
                 return false;
             }
         }
+        public bool IsInGame(Game game, int UserID)
+        {
+            foreach(PlayersInGame pl in game.PlayersInGames)
+            {
+                if (pl.UserId == UserID)
+                    return true;
+            }
+            return false;
+        }
+        public void CreateGameBoard(Game game)
+        {
+            MoversInGame[,] board = new MoversInGame[10, 10];
+            MoversInGame[] ladders = new MoversInGame[8];
+            MoversInGame[] snakes = new MoversInGame[8];
+            Random rnd = new Random();
+            // setting the ladders
+            for (int i = 0; i < ladders.Length; i++)
+            {
+                do
+                {                  
+                    // 5 small ladders
+                    if (i >= 0 && i <= 4)
+                    {
+                        int startId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
+                        int endId = startId + rnd.Next(8, 21);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsLadder = true
+                        };
+                    }
+                    // 2 medium ladders
+                    if (i == 5)
+                    {
+                        int startId = rnd.Next(1, 26);
+                        int endId = rnd.Next(50, 66);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsLadder = true
+                        };
+                    }
+                    if (i == 6)
+                    {
+                        int startId = rnd.Next(15, 41);
+                        int endId = rnd.Next(70, 86);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsLadder = true
+                        };
+                    }
+                    // 1 big ladder
+                    if (i == 7)
+                    {
+                        int startId = rnd.Next(10, 31);
+                        int endId = rnd.Next(70, 96);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsLadder = true
+                        };
+                    }
 
+                } while (CheckMover(ladders, ladders[i]) && CheckMover(snakes, ladders[i]));
+
+            }
+            // setting the snakes
+            for (int i = 0; i < snakes.Length; i++)
+            {
+                do 
+                {
+                    // 5 small ladders
+                    if(i >= 0 && i <= 4)
+                    {
+                        int endId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
+                        int startId = endId + rnd.Next(8, 21);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsSnake = true
+                        };
+                    }
+                    // 1 medium snakes
+                    if(i == 5)
+                    {
+                        int startId = rnd.Next(55, 86);
+                        int endId = rnd.Next(10, 31);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsSnake = true
+                        };
+                    }
+                    // 1 top snake
+                    if (i == 6)
+                    {
+                        int startId = rnd.Next(96, 100);
+                        int endId = rnd.Next(40, 71);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id,
+                            IsSnake = true
+                        };
+                    }
+                    // 1 big snake
+                    if (i == 7)
+                    {
+                        int startId = rnd.Next(80, 97);
+                        int endId = rnd.Next(20, 41);
+                        ladders[i] = new MoversInGame
+                        {
+                            StartPosId = startId,
+                            EndPosId = endId,
+                            NextPosId = startId + 1,
+                            GameId = game.Id
+                        };
+                    }
+                } while (CheckMover(ladders, snakes[i]) && CheckMover(snakes, snakes[i]));
+            }
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    MoversInGame mover = new MoversInGame
+                    {
+                        GameId = game.Id,
+                        StartPosId = this.GetPositionID(j, i),
+                        NextPosId = this.GetPositionID(j, i) + 1,
+                        EndPosId = this.GetPositionID(j, i) + 1
+                    };
+                    if (i == 9 && j == 0)
+                    {
+                        mover = new MoversInGame
+                        {
+                            GameId = game.Id,
+                            StartPosId = this.GetPositionID(j, i),
+                            NextPosId = this.GetPositionID(j, i),
+                            EndPosId = this.GetPositionID(j, i)
+                        };
+                    }
+                    foreach (MoversInGame m in ladders)
+                    {
+                        if (m.StartPos.X == j && m.StartPos.Y == i)
+                        {
+                            mover.EndPosId = m.EndPosId;
+                        }
+                    }
+                    board[j, i] = mover;
+                }
+            }
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
+                PropertyNameCaseInsensitive = true
+            };
+            game.Board = JsonSerializer.Serialize(board, options);
+
+        }
+        public bool CheckMover(MoversInGame[]arr, MoversInGame mover)
+        {
+            foreach(MoversInGame m in arr)
+            {
+                if (m != null)
+                {
+                    if (m.StartPosId == mover.StartPosId || m.StartPosId == mover.EndPosId ||
+                        m.EndPosId == mover.StartPosId || m.EndPosId == mover.EndPosId)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        public int GetPlayersNumber(string privateKey)
+        {
+            Game g = this.Games.Include(gm => gm.PlayersInGames).Where(gm => gm.PrivateKey == privateKey).FirstOrDefault();
+            int counter = 0;
+            foreach (PlayersInGame pl in g.PlayersInGames) 
+            {
+                if (pl.IsInGame)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
     }
     
 }
