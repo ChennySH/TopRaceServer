@@ -156,9 +156,6 @@ namespace TopRaceServer.Controllers
                 this.context.SaveChanges();
                 this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, game));
                 this.context.SaveChanges();
-                this.context.CreateGameBoard(game);
-                this.context.Games.Update(game);
-                this.context.SaveChanges();
                 return game;
             }
             catch (Exception e)
@@ -349,6 +346,22 @@ namespace TopRaceServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
                 return false;
             }
+        }
+        [Route("StartGame")]
+        [HttpGet]
+        public Game StartGame(int GameID)
+        {
+            User currentUser = HttpContext.Session.GetObject<User>("theUser");
+            if (currentUser == null)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                return null;
+            }
+            Game g = this.context.GetGame(GameID);
+            g.CreateGameBoard();
+            this.context.Games.Update(g);
+            this.context.SaveChanges();
+            return g;
         }
         [Route("Play")]
         [HttpGet]

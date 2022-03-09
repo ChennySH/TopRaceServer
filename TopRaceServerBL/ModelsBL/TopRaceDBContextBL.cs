@@ -360,8 +360,7 @@ namespace TopRaceServerBL.Models
                     {
                         if (m.StartPos.X == j && m.StartPos.Y == i)
                         {
-                            mover = m;
-                       
+                            mover = m;                     
                         }
                     }
                     foreach (MoversInGame m in snakes)
