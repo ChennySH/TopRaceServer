@@ -151,7 +151,8 @@ namespace TopRaceServer.Controllers
                 game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
                 game.PrivateKey = this.context.GetPrivateKey();
                 game.ChatRoom = new ChatRoom();
-
+                // creating the game's board
+                game.Board = this.context.CreateGameBoard(game);
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
                 this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, game));
@@ -348,8 +349,7 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 Game g = this.context.GetGame(gameID);
-                // creating the game's board
-                g.Board = this.context.CreateGameBoard(g);
+
                 // getting the number of player in the game
                 int playersNum = this.context.GetPlayersNumber(gameID);
                 // choosing a random starter

@@ -132,6 +132,20 @@ namespace TopRaceServerBL.Models
             SaveChanges();
             return pos.Id;
         }
+        public Position GetPosition(int x, int y)
+        {
+            Position p = this.Positions.Where(p => p.X == x && p.Y == y).FirstOrDefault();
+            if (p != null)
+                return p;
+            Position pos = new Position
+            {
+                X = x,
+                Y = y
+            };
+            this.Positions.Add(pos);
+            SaveChanges();
+            return pos;
+        }
         public Position GetPositionByID(int id)
         {
             return this.Positions.Where(p => p.Id == id).FirstOrDefault();
@@ -283,7 +297,7 @@ namespace TopRaceServerBL.Models
                     {
                         int endId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
                         int startId = endId + rnd.Next(8, 21);
-                        ladders[i] = new MoversInGame
+                        snakes[i] = new MoversInGame
                         {
                             StartPosId = startId,
                             EndPosId = endId,
@@ -297,7 +311,7 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(55, 86);
                         int endId = rnd.Next(10, 31);
-                        ladders[i] = new MoversInGame
+                        snakes[i] = new MoversInGame
                         {
                             StartPosId = startId,
                             EndPosId = endId,
@@ -311,7 +325,7 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(96, 100);
                         int endId = rnd.Next(40, 71);
-                        ladders[i] = new MoversInGame
+                        snakes[i] = new MoversInGame
                         {
                             StartPosId = startId,
                             EndPosId = endId,
@@ -325,7 +339,7 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(80, 97);
                         int endId = rnd.Next(20, 41);
-                        ladders[i] = new MoversInGame
+                        snakes[i] = new MoversInGame
                         {
                             StartPosId = startId,
                             EndPosId = endId,
@@ -334,6 +348,18 @@ namespace TopRaceServerBL.Models
                         };
                     }
                 } while (CheckMover(ladders, snakes[i]) && CheckMover(snakes, snakes[i]));
+            }
+            foreach(MoversInGame l in ladders)
+            {
+                l.StartPos = this.Positions.Where(p => p.Id == l.StartPosId).FirstOrDefault();
+                l.NextPos = this.Positions.Where(p => p.Id == l.NextPosId).FirstOrDefault();
+                l.EndPos = this.Positions.Where(p => p.Id == l.EndPosId).FirstOrDefault();
+            }
+            foreach (MoversInGame s in snakes)
+            {
+                s.StartPos = this.Positions.Where(p => p.Id == s.StartPosId).FirstOrDefault();
+                s.NextPos = this.Positions.Where(p => p.Id == s.NextPosId).FirstOrDefault();
+                s.EndPos = this.Positions.Where(p => p.Id == s.EndPosId).FirstOrDefault();
             }
             for (int i = 0; i < board.GetLength(0); i++)
             {
@@ -378,7 +404,7 @@ namespace TopRaceServerBL.Models
                 ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
                 PropertyNameCaseInsensitive = true
             };
-            return JsonSerializer.Serialize(board, options);
+            return JsonSerializer.Serialize<MoversInGame[,]>(board, options);
 
         }
         public bool CheckMover(MoversInGame[]arr, MoversInGame mover)
