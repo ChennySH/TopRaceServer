@@ -136,6 +136,7 @@ namespace TopRaceServer.Controllers
                 Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
             }
         }
+
         [Route("HostGame")]
         [HttpPost]
         public GameDTO HostGame([FromBody] GameDTO game)
