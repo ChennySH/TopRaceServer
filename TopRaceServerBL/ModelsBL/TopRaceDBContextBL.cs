@@ -217,7 +217,7 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
-        public string CreateGameBoard(Game game)
+        public MoversInGame[][] CreateGameBoard(int gameId)
         {
             MoversInGame[,] board = new MoversInGame[10, 10];
             MoversInGame[] ladders = new MoversInGame[8];
@@ -238,7 +238,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -252,7 +252,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -265,7 +265,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -279,7 +279,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -302,7 +302,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -316,7 +316,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -330,7 +330,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id,
+                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -344,7 +344,7 @@ namespace TopRaceServerBL.Models
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = game.Id
+                            GameId = gameId
                         };
                     }
                 } while (CheckMover(ladders, snakes[i]) && CheckMover(snakes, snakes[i]));
@@ -367,7 +367,7 @@ namespace TopRaceServerBL.Models
                 {
                     MoversInGame mover = new MoversInGame
                     {
-                        GameId = game.Id,
+                        GameId = gameId,
                         StartPosId = this.GetPositionID(j, i),
                         NextPosId = this.GetPositionID(j, i) + 1,
                         EndPosId = this.GetPositionID(j, i) + 1
@@ -376,7 +376,7 @@ namespace TopRaceServerBL.Models
                     {
                         mover = new MoversInGame
                         {
-                            GameId = game.Id,
+                            GameId = gameId,
                             StartPosId = this.GetPositionID(j, i),
                             NextPosId = this.GetPositionID(j, i),
                             EndPosId = this.GetPositionID(j, i)
@@ -399,14 +399,52 @@ namespace TopRaceServerBL.Models
                     board[j, i] = mover;
                 }
             }
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
-                PropertyNameCaseInsensitive = true
-            };
-            return JsonSerializer.Serialize<MoversInGame[,]>(board, options);
+            
+            return ToJaggedArray<MoversInGame>(board);
 
         }
+
+        public static T[][] ToJaggedArray<T>(T[,] twoDimensionalArray)
+        {
+            int rowsFirstIndex = twoDimensionalArray.GetLowerBound(0);
+            int rowsLastIndex = twoDimensionalArray.GetUpperBound(0);
+            int numberOfRows = rowsLastIndex - rowsFirstIndex + 1;
+
+            int columnsFirstIndex = twoDimensionalArray.GetLowerBound(1);
+            int columnsLastIndex = twoDimensionalArray.GetUpperBound(1);
+            int numberOfColumns = columnsLastIndex - columnsFirstIndex + 1;
+
+            T[][] jaggedArray = new T[numberOfRows][];
+            for (int i = 0; i < numberOfRows; i++)
+            {
+                jaggedArray[i] = new T[numberOfColumns];
+
+                for (int j = 0; j < numberOfColumns; j++)
+                {
+                    jaggedArray[i][j] = twoDimensionalArray[i + rowsFirstIndex, j + columnsFirstIndex];
+                }
+            }
+            return jaggedArray;
+        }
+
+        public static T[,] ToMatrix<T>(T[][] jaggedArray)
+        {
+            int rows = jaggedArray.Length;
+            int cols = jaggedArray[0].Length;
+
+            T[,] twoDimensionalArray = new T[rows, cols];
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; i++)
+                {
+                    twoDimensionalArray[i, j] = jaggedArray[i][j];
+                }
+            }
+
+            return twoDimensionalArray;
+        }
+
         public bool CheckMover(MoversInGame[]arr, MoversInGame mover)
         {
             foreach(MoversInGame m in arr)

@@ -138,7 +138,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("HostGame")]
         [HttpPost]
-        public Game HostGame([FromBody] Game game)
+        public GameDTO HostGame([FromBody] GameDTO game)
         {
             try
             {
@@ -152,10 +152,11 @@ namespace TopRaceServer.Controllers
                 game.PrivateKey = this.context.GetPrivateKey();
                 game.ChatRoom = new ChatRoom();
                 // creating the game's board
-                game.Board = this.context.CreateGameBoard(game);
-                this.context.Games.Update(game);
+                game.Board = this.context.CreateGameBoard(game.Id);
+                Game dbGame = game.ToGame();
+                this.context.Games.Update(dbGame);
                 this.context.SaveChanges();
-                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, game));
+                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, dbGame));
                 this.context.SaveChanges();
                 return game;
             }
@@ -167,7 +168,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("GetGame")]
         [HttpGet]
-        public Game GetGame([FromQuery] int GameID)
+        public GameDTO GetGame([FromQuery] int GameID)
         {
             try
             {
@@ -179,7 +180,7 @@ namespace TopRaceServer.Controllers
                 }
                
                 Game g = this.context.GetGame(GameID);
-                return g;
+                return new GameDTO(g);
             }
             catch
             {
@@ -210,7 +211,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("JoinPrivateGame")]
         [HttpGet]
-        public Game JoinPrivateGame([FromQuery] string privateKey)
+        public GameDTO JoinPrivateGame([FromQuery] string privateKey)
         {
             try
             {
@@ -241,7 +242,7 @@ namespace TopRaceServer.Controllers
                 //this.context.Update(game);
                 this.context.Entry(game).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 this.context.SaveChanges();
-                return game;
+                return new GameDTO(game);
             }
             catch(Exception e)
             {
@@ -338,7 +339,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("StartGame")]
         [HttpGet]
-        public Game StartGame(int gameID)
+        public GameDTO StartGame(int gameID)
         {
             try
             {
@@ -371,7 +372,7 @@ namespace TopRaceServer.Controllers
                 }
                 this.context.Games.Update(g);
                 this.context.SaveChanges();
-                return g;
+                return new GameDTO(g);
             }
             catch(Exception e)
             {
@@ -380,7 +381,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("Play")]
         [HttpGet]
-        public Game Play(int GameID)
+        public GameDTO Play(int GameID)
         {
             try
             {
@@ -422,7 +423,7 @@ namespace TopRaceServer.Controllers
                 // using the gameDTO in order to check if he landed on a ladder or a snake
                 // and if he did to move him to the mover's end position
                 GameDTO gameDTO = new GameDTO(game);
-                MoversInGame[,] board = gameDTO.board;
+                MoversInGame[,] board = TopRaceDBContext.ToMatrix(gameDTO.Board);
                 MoversInGame mover = board[newPos.X, newPos.Y];
                 if (mover.IsLadder || mover.IsSnake)
                 {
@@ -470,7 +471,7 @@ namespace TopRaceServer.Controllers
                 // updating the last roll result
                 game.LastRollResult = rollResult;
                 this.context.Games.Update(game);
-                return game;
+                return new GameDTO(game);
 
             }
             catch (Exception e)
