@@ -29,7 +29,6 @@ namespace TopRaceServerBL.Models
         public DateTime EnterTime { get; set; }
         public DateTime LastMoveTime { get; set; }
 
-        public virtual ChatRoom ChatRoom { get; set; }
         public virtual Color Color { get; set; }
         public virtual Position CurrentPos { get; set; }
         public virtual Game Game { get; set; }

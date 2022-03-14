@@ -17,12 +17,11 @@ namespace TopRaceServerBL.Models
         {
         }
 
-        public virtual DbSet<ChatRoom> ChatRooms { get; set; }
         public virtual DbSet<Color> Colors { get; set; }
         public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<GameStatus> GameStatuses { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
-        public virtual DbSet<MoversInGame> MoversInGames { get; set; }
+        public virtual DbSet<Mover> Movers { get; set; }
         public virtual DbSet<PlayersInGame> PlayersInGames { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -39,13 +38,6 @@ namespace TopRaceServerBL.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
-
-            modelBuilder.Entity<ChatRoom>(entity =>
-            {
-                entity.ToTable("ChatRoom");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-            });
 
             modelBuilder.Entity<Color>(entity =>
             {
@@ -74,9 +66,7 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.Board)
                     .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
+                    .HasColumnType("text");
 
                 entity.Property(e => e.CurrentPlayerInTurnId).HasColumnName("CurrentPlayerInTurnID");
 
@@ -97,12 +87,6 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
 
                 entity.Property(e => e.WinnerId).HasColumnName("WinnerID");
-
-                entity.HasOne(d => d.ChatRoom)
-                    .WithMany(p => p.Games)
-                    .HasForeignKey(d => d.ChatRoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("game_chatroomid_foreign");
 
                 entity.HasOne(d => d.CurrentPlayerInTurn)
                     .WithMany(p => p.GameCurrentPlayerInTurns)
@@ -149,9 +133,9 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
-
                 entity.Property(e => e.FromId).HasColumnName("FromID");
+
+                entity.Property(e => e.GameId).HasColumnName("GameID");
 
                 entity.Property(e => e.Message1)
                     .IsRequired()
@@ -160,55 +144,47 @@ namespace TopRaceServerBL.Models
 
                 entity.Property(e => e.TimeSent).HasColumnType("datetime");
 
-                entity.HasOne(d => d.ChatRoom)
-                    .WithMany(p => p.Messages)
-                    .HasForeignKey(d => d.ChatRoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("message_chatroomid_foreign");
-
                 entity.HasOne(d => d.From)
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.FromId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("message_fromid_foreign");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.Messages)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("message_gameid_foreign");
             });
 
-            modelBuilder.Entity<MoversInGame>(entity =>
+            modelBuilder.Entity<Mover>(entity =>
             {
-                entity.ToTable("MoversInGame");
+                entity.ToTable("Mover");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.EndPosId).HasColumnName("EndPosID");
-
-                entity.Property(e => e.GameId).HasColumnName("GameID");
 
                 entity.Property(e => e.NextPosId).HasColumnName("NextPosID");
 
                 entity.Property(e => e.StartPosId).HasColumnName("StartPosID");
 
                 entity.HasOne(d => d.EndPos)
-                    .WithMany(p => p.MoversInGameEndPos)
+                    .WithMany(p => p.MoverEndPos)
                     .HasForeignKey(d => d.EndPosId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("moversingame_endposid_foreign");
-
-                entity.HasOne(d => d.Game)
-                    .WithMany(p => p.MoversInGames)
-                    .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("moversingame_gameid_foreign");
+                    .HasConstraintName("mover_endposid_foreign");
 
                 entity.HasOne(d => d.NextPos)
-                    .WithMany(p => p.MoversInGameNextPos)
+                    .WithMany(p => p.MoverNextPos)
                     .HasForeignKey(d => d.NextPosId)
-                    .HasConstraintName("moversingame_nextposid_foreign");
+                    .HasConstraintName("mover_nextposid_foreign");
 
                 entity.HasOne(d => d.StartPos)
-                    .WithMany(p => p.MoversInGameStartPos)
+                    .WithMany(p => p.MoverStartPos)
                     .HasForeignKey(d => d.StartPosId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("moversingame_startposid_foreign");
+                    .HasConstraintName("mover_startposid_foreign");
             });
 
             modelBuilder.Entity<PlayersInGame>(entity =>
@@ -238,12 +214,6 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(255);
-
-                entity.HasOne(d => d.ChatRoom)
-                    .WithMany(p => p.PlayersInGames)
-                    .HasForeignKey(d => d.ChatRoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("playersingame_chatroomid_foreign");
 
                 entity.HasOne(d => d.Color)
                     .WithMany(p => p.PlayersInGames)

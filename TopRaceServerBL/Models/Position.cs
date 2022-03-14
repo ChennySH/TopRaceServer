@@ -9,9 +9,9 @@ namespace TopRaceServerBL.Models
     {
         public Position()
         {
-            MoversInGameEndPos = new HashSet<MoversInGame>();
-            MoversInGameNextPos = new HashSet<MoversInGame>();
-            MoversInGameStartPos = new HashSet<MoversInGame>();
+            MoverEndPos = new HashSet<Mover>();
+            MoverNextPos = new HashSet<Mover>();
+            MoverStartPos = new HashSet<Mover>();
             PlayersInGames = new HashSet<PlayersInGame>();
         }
 
@@ -19,9 +19,9 @@ namespace TopRaceServerBL.Models
         public int X { get; set; }
         public int Y { get; set; }
 
-        public virtual ICollection<MoversInGame> MoversInGameEndPos { get; set; }
-        public virtual ICollection<MoversInGame> MoversInGameNextPos { get; set; }
-        public virtual ICollection<MoversInGame> MoversInGameStartPos { get; set; }
+        public virtual ICollection<Mover> MoverEndPos { get; set; }
+        public virtual ICollection<Mover> MoverNextPos { get; set; }
+        public virtual ICollection<Mover> MoverStartPos { get; set; }
         public virtual ICollection<PlayersInGame> PlayersInGames { get; set; }
     }
 }

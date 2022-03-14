@@ -24,7 +24,6 @@ CREATE TABLE "Game"(
     "IsPrivate" BIT NOT NULL,
     "PrivateKey" NVARCHAR(255) NOT NULL,
     "HostUserID" INT NOT NULL,
-    "ChatRoomID" INT NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL,
     "Board" TEXT NOT NULL,
     "StatusID" INT NOT NULL,
@@ -52,9 +51,6 @@ CREATE TABLE "PlayersInGame"(
 );
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_id_primary" PRIMARY KEY("id");
-CREATE TABLE "ChatRoom"("id" INT  IDENTITY NOT NULL);
-ALTER TABLE
-    "ChatRoom" ADD CONSTRAINT "chatroom_id_primary" PRIMARY KEY("id");
 CREATE TABLE "Color"(
     "id" INT IDENTITY NOT NULL,
     "ColorName" NVARCHAR(255) NOT NULL,
@@ -67,7 +63,7 @@ CREATE TABLE "Message"(
     "id" INT IDENTITY NOT NULL,
     "FromID" INT NOT NULL,
     "Message" NVARCHAR(255) NOT NULL,
-    "ChatRoomID" INT NOT NULL,
+    "GameID" INT NOT NULL,
     "TimeSent" DATETIME NOT NULL
 );
 ALTER TABLE
@@ -85,9 +81,8 @@ CREATE TABLE "Position"(
 );
 ALTER TABLE
     "Position" ADD CONSTRAINT "position_id_primary" PRIMARY KEY("id");
-CREATE TABLE "MoversInGame"(
+CREATE TABLE "Mover"(
     "id" INT IDENTITY NOT NULL,
-    "GameID" INT NOT NULL,
     "StartPosID" INT NOT NULL,
     "NextPosID" INT NULL,
     "EndPosID" INT NOT NULL,
@@ -95,7 +90,7 @@ CREATE TABLE "MoversInGame"(
     "IsSnake" BIT NOT NULL
 );
 ALTER TABLE
-    "MoversInGame" ADD CONSTRAINT "moversingame_id_primary" PRIMARY KEY("id");
+    "Mover" ADD CONSTRAINT "mover_id_primary" PRIMARY KEY("id");
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_userid_foreign" FOREIGN KEY("UserID") REFERENCES "User"("id");
 ALTER TABLE
@@ -103,7 +98,7 @@ ALTER TABLE
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
 ALTER TABLE
-    "MoversInGame" ADD CONSTRAINT "moversingame_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
+    "Message" ADD CONSTRAINT "message_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
 ALTER TABLE
     "Game" ADD CONSTRAINT "game_winnerid_foreign" FOREIGN KEY("WinnerID") REFERENCES "PlayersInGame"("id");
 ALTER TABLE
@@ -113,24 +108,18 @@ ALTER TABLE
 ALTER TABLE
     "Message" ADD CONSTRAINT "message_fromid_foreign" FOREIGN KEY("FromID") REFERENCES "PlayersInGame"("id");
 ALTER TABLE
-    "PlayersInGame" ADD CONSTRAINT "playersingame_chatroomid_foreign" FOREIGN KEY("ChatRoomID") REFERENCES "ChatRoom"("id");
-ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_currentposid_foreign" FOREIGN KEY("CurrentPosID") REFERENCES "Position"("id");
-ALTER TABLE
-    "Message" ADD CONSTRAINT "message_chatroomid_foreign" FOREIGN KEY("ChatRoomID") REFERENCES "ChatRoom"("id");
-ALTER TABLE
-    "Game" ADD CONSTRAINT "game_chatroomid_foreign" FOREIGN KEY("ChatRoomID") REFERENCES "ChatRoom"("id");
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_colorid_foreign" FOREIGN KEY("ColorID") REFERENCES "Color"("id");
 ALTER TABLE
     "Game" ADD CONSTRAINT "game_statusid_foreign" FOREIGN KEY("StatusID") REFERENCES "GameStatus"("id");
 ALTER TABLE
-    "MoversInGame" ADD CONSTRAINT "moversingame_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
+    "Mover" ADD CONSTRAINT "mover_startposid_foreign" FOREIGN KEY("StartPosID") REFERENCES "Position"("id");
 ALTER TABLE
-    "MoversInGame" ADD CONSTRAINT "moversingame_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
+    "Mover" ADD CONSTRAINT "mover_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
 ALTER TABLE
-    "MoversInGame" ADD CONSTRAINT "moversingame_nextposid_foreign" FOREIGN KEY("NextPosID") REFERENCES "Position"("id");
-GO
+    "Mover" ADD CONSTRAINT "mover_nextposid_foreign" FOREIGN KEY("NextPosID") REFERENCES "Position"("id");
+	GO
 use TopRaceDB 
 insert GameStatus (StatusName)
 values ('Wait');
@@ -367,5 +356,4 @@ Values(2,9);
  INSERT [Position](x,y)--99--
 Values(1,9);
  INSERT [Position](x,y)--100--
-Values(0,9);
-  
+Values(0,9);  
