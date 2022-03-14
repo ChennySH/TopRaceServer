@@ -108,10 +108,13 @@ namespace TopRaceServerBL.Models
             foreach (Color color in this.Colors)
             {
                 bool isInUse = false;
-                foreach (PlayersInGame p in game.PlayersInGames)
-                {
-                    if (p.ColorId == color.Id && p.IsInGame)
-                        isInUse = true;
+                if (game.PlayersInGames != null)
+                { 
+                    foreach (PlayersInGame p in game.PlayersInGames)
+                    {
+                        if (p.ColorId == color.Id && p.IsInGame)
+                            isInUse = true;
+                    }
                 }
                 if (!isInUse)
                     return color.Id;
@@ -121,16 +124,7 @@ namespace TopRaceServerBL.Models
         public int GetPositionID(int x, int y)
         {
             Position p = this.Positions.Where(p => p.X == x && p.Y == y).FirstOrDefault();
-            if (p != null)
-                return p.Id;
-            Position pos = new Position
-            {
-                X = x,
-                Y = y
-            };
-            this.Positions.Add(pos);
-            SaveChanges();
-            return pos.Id;
+            return p.Id;
         }
         public Position GetPosition(int x, int y)
         {

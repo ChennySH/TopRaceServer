@@ -72,6 +72,7 @@ namespace TopRaceServer.DTOs
             return new Game()
             {
                 LastUpdateTime = this.LastUpdateTime,
+                GameName = this.GameName,
                 HostUser = this.HostUser,
                 PlayersInGames = this.PlayersInGames?.ToList(),
                 Winner = this.Winner,

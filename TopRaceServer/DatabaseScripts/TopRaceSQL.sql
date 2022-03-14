@@ -26,7 +26,7 @@ CREATE TABLE "Game"(
     "HostUserID" INT NOT NULL,
     "ChatRoomID" INT NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL,
-    "Board" NVARCHAR(255) NOT NULL,
+    "Board" TEXT NOT NULL,
     "StatusID" INT NOT NULL,
     "WinnerID" INT NULL,
     "CurrentPlayerInTurnID" INT NULL,
