@@ -63,6 +63,7 @@ namespace TopRaceServer.DTOs
 
         public Game ToGame()
         {
+
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
