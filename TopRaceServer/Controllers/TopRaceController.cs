@@ -151,7 +151,6 @@ namespace TopRaceServer.Controllers
                 }
                 game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
                 game.PrivateKey = this.context.GetPrivateKey();
-                game.ChatRoom = new ChatRoom();
                 // creating the game's board
                 game.Board = this.context.CreateGameBoard(game.Id);
                 Game dbGame = game.ToGame();
@@ -425,8 +424,8 @@ namespace TopRaceServer.Controllers
                 // using the gameDTO in order to check if he landed on a ladder or a snake
                 // and if he did to move him to the mover's end position
                 GameDTO gameDTO = new GameDTO(game);
-                MoversInGame[,] board = TopRaceDBContext.ToMatrix(gameDTO.Board);
-                MoversInGame mover = board[newPos.X, newPos.Y];
+                Mover[,] board = TopRaceDBContext.ToMatrix(gameDTO.Board);
+                Mover mover = board[newPos.X, newPos.Y];
                 if (mover.IsLadder || mover.IsSnake)
                 {
                     int finalPosId = mover.EndPosId;

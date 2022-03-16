@@ -88,7 +88,6 @@ namespace TopRaceServerBL.Models
             //this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             PlayersInGame playerInGame = new PlayersInGame
             {
-                ChatRoomId = game.ChatRoomId,
                 UserId = user.Id,
                 UserName = user.UserName,
                 ProfilePic = user.ProfilePic,
@@ -146,12 +145,12 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
             return g;
         }
         public Game GetGameFromKey(string privateKey)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.ChatRoom).ThenInclude(ch => ch.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
 
             return g;
         }
@@ -211,11 +210,11 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
-        public MoversInGame[][] CreateGameBoard(int gameId)
+        public Mover[][] CreateGameBoard(int gameId)
         {
-            MoversInGame[,] board = new MoversInGame[10, 10];
-            MoversInGame[] ladders = new MoversInGame[8];
-            MoversInGame[] snakes = new MoversInGame[8];
+            Mover[,] board = new Mover[10, 10];
+            Mover[] ladders = new Mover[8];
+            Mover[] snakes = new Mover[8];
             Random rnd = new Random();
             // setting the ladders
             for (int i = 0; i < ladders.Length; i++)
@@ -227,12 +226,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
                         int endId = startId + rnd.Next(8, 21);
-                        ladders[i] = new MoversInGame
+                        ladders[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -241,12 +239,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(1, 26);
                         int endId = rnd.Next(50, 66);
-                        ladders[i] = new MoversInGame
+                        ladders[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -254,12 +251,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(15, 41);
                         int endId = rnd.Next(70, 86);
-                        ladders[i] = new MoversInGame
+                        ladders[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -268,12 +264,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(10, 31);
                         int endId = rnd.Next(70, 96);
-                        ladders[i] = new MoversInGame
+                        ladders[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsLadder = true
                         };
                     }
@@ -291,12 +286,11 @@ namespace TopRaceServerBL.Models
                     {
                         int endId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
                         int startId = endId + rnd.Next(8, 21);
-                        snakes[i] = new MoversInGame
+                        snakes[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -305,12 +299,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(55, 86);
                         int endId = rnd.Next(10, 31);
-                        snakes[i] = new MoversInGame
+                        snakes[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -319,12 +312,11 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(96, 100);
                         int endId = rnd.Next(40, 71);
-                        snakes[i] = new MoversInGame
+                        snakes[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId,
                             IsSnake = true
                         };
                     }
@@ -333,23 +325,22 @@ namespace TopRaceServerBL.Models
                     {
                         int startId = rnd.Next(80, 97);
                         int endId = rnd.Next(20, 41);
-                        snakes[i] = new MoversInGame
+                        snakes[i] = new Mover
                         {
                             StartPosId = startId,
                             EndPosId = endId,
                             NextPosId = startId + 1,
-                            GameId = gameId
                         };
                     }
                 } while (CheckMover(ladders, snakes[i]) && CheckMover(snakes, snakes[i]));
             }
-            foreach(MoversInGame l in ladders)
+            foreach(Mover l in ladders)
             {
                 l.StartPos = this.Positions.Where(p => p.Id == l.StartPosId).FirstOrDefault();
                 l.NextPos = this.Positions.Where(p => p.Id == l.NextPosId).FirstOrDefault();
                 l.EndPos = this.Positions.Where(p => p.Id == l.EndPosId).FirstOrDefault();
             }
-            foreach (MoversInGame s in snakes)
+            foreach (Mover s in snakes)
             {
                 s.StartPos = this.Positions.Where(p => p.Id == s.StartPosId).FirstOrDefault();
                 s.NextPos = this.Positions.Where(p => p.Id == s.NextPosId).FirstOrDefault();
@@ -359,31 +350,29 @@ namespace TopRaceServerBL.Models
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    MoversInGame mover = new MoversInGame
+                    Mover mover = new Mover
                     {
-                        GameId = gameId,
                         StartPosId = this.GetPositionID(j, i),
                         NextPosId = this.GetPositionID(j, i) + 1,
                         EndPosId = this.GetPositionID(j, i) + 1
                     };
                     if (i == 9 && j == 0)
                     {
-                        mover = new MoversInGame
+                        mover = new Mover
                         {
-                            GameId = gameId,
                             StartPosId = this.GetPositionID(j, i),
                             NextPosId = this.GetPositionID(j, i),
                             EndPosId = this.GetPositionID(j, i)
                         };
                     }
-                    foreach (MoversInGame m in ladders)
+                    foreach (Mover m in ladders)
                     {
                         if (m.StartPos.X == j && m.StartPos.Y == i)
                         {
                             mover = m;                     
                         }
                     }
-                    foreach (MoversInGame m in snakes)
+                    foreach (Mover m in snakes)
                     {
                         if (m.StartPos.X == j && m.StartPos.Y == i)
                         {
@@ -393,8 +382,11 @@ namespace TopRaceServerBL.Models
                     board[j, i] = mover;
                 }
             }
-            
-            return ToJaggedArray<MoversInGame>(board);
+            foreach(Mover m in board)
+            {
+                this.Movers.Update(m);
+            }
+            return ToJaggedArray<Mover>(board);
 
         }
 
@@ -439,9 +431,9 @@ namespace TopRaceServerBL.Models
             return twoDimensionalArray;
         }
 
-        public bool CheckMover(MoversInGame[]arr, MoversInGame mover)
+        public bool CheckMover(Mover[]arr, Mover mover)
         {
-            foreach(MoversInGame m in arr)
+            foreach(Mover m in arr)
             {
                 if (m != null)
                 {

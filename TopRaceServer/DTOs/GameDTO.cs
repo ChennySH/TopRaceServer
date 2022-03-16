@@ -71,7 +71,7 @@ namespace TopRaceServer.DTOs
             };
             return new Game()
             {
-                Messages = this.Messages,
+                Messages = this.Messages?.ToList(),
                 LastUpdateTime = this.LastUpdateTime,
                 GameName = this.GameName,
                 HostUser = this.HostUser,
