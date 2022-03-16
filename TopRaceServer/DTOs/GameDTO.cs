@@ -30,14 +30,18 @@ namespace TopRaceServer.DTOs
         public virtual ICollection<Message> Messages { get; set; }
 
         //
-        public GameDTO() { }
+        public GameDTO() 
+        {
+            this.Messages = new List<Message>();
+            this.PlayersInGames = new List<PlayersInGame>();
+        }
         public Mover[][] Board { get; set; }
         public GameDTO(Game game)
         {
-            Messages = game.Messages.ToList();
+            Messages = game.Messages?.ToList();
             LastUpdateTime = game.LastUpdateTime;
             HostUser = game.HostUser;
-            PlayersInGames = game.PlayersInGames.ToList();
+            PlayersInGames = game.PlayersInGames?.ToList();
             Winner = game.Winner;
             CurrentPlayerInTurn = game.CurrentPlayerInTurn;
             Id = game.Id;

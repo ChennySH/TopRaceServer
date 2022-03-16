@@ -152,7 +152,7 @@ namespace TopRaceServer.Controllers
                 game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
                 game.PrivateKey = this.context.GetPrivateKey();
                 // creating the game's board
-                game.Board = this.context.CreateGameBoard(game.Id);
+                game.Board = this.context.CreateGameBoard();
                 Game dbGame = game.ToGame();
                 this.context.Games.Update(dbGame);
                 this.context.SaveChanges();

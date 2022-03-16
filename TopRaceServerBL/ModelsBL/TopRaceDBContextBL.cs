@@ -210,7 +210,7 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
-        public Mover[][] CreateGameBoard(int gameId)
+        public Mover[][] CreateGameBoard()
         {
             Mover[,] board = new Mover[10, 10];
             Mover[] ladders = new Mover[8];
@@ -385,6 +385,7 @@ namespace TopRaceServerBL.Models
             foreach(Mover m in board)
             {
                 this.Movers.Update(m);
+                this.SaveChanges();
             }
             return ToJaggedArray<Mover>(board);
 
