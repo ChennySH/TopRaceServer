@@ -156,7 +156,7 @@ namespace TopRaceServer.Controllers
                 Game dbGame = game.ToGame();
                 this.context.Games.Update(dbGame);
                 this.context.SaveChanges();
-                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(game.HostUser, true, dbGame));
+                this.context.PlayersInGames.Update(this.context.CreatePlayerInGame(currentUser, true, dbGame));
                 this.context.SaveChanges();
                 GameDTO newDTO = new GameDTO(dbGame);
                 return newDTO;

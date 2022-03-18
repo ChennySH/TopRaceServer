@@ -23,7 +23,6 @@ CREATE TABLE "Game"(
     "GameName" NVARCHAR(255) NOT NULL,
     "IsPrivate" BIT NOT NULL,
     "PrivateKey" NVARCHAR(255) NOT NULL,
-    "HostUserID" INT NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL,
     "Board" TEXT NOT NULL,
     "StatusID" INT NOT NULL,
@@ -94,8 +93,6 @@ ALTER TABLE
 ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_userid_foreign" FOREIGN KEY("UserID") REFERENCES "User"("id");
 ALTER TABLE
-    "Game" ADD CONSTRAINT "game_hostuserid_foreign" FOREIGN KEY("HostUserID") REFERENCES "User"("id");
-ALTER TABLE
     "PlayersInGame" ADD CONSTRAINT "playersingame_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
 ALTER TABLE
     "Message" ADD CONSTRAINT "message_gameid_foreign" FOREIGN KEY("GameID") REFERENCES "Game"("id");
@@ -119,7 +116,7 @@ ALTER TABLE
     "Mover" ADD CONSTRAINT "mover_endposid_foreign" FOREIGN KEY("EndPosID") REFERENCES "Position"("id");
 ALTER TABLE
     "Mover" ADD CONSTRAINT "mover_nextposid_foreign" FOREIGN KEY("NextPosID") REFERENCES "Position"("id");
-	GO
+GO
 use TopRaceDB 
 insert GameStatus (StatusName)
 values ('Wait');
@@ -357,3 +354,4 @@ Values(2,9);
 Values(1,9);
  INSERT [Position](x,y)--100--
 Values(0,9);  
+-- scaffold-dbcontext "Server=localhost\sqlexpress;Database=TopRaceDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –force

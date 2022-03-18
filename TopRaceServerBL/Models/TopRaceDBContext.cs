@@ -37,7 +37,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Color>(entity =>
             {
@@ -74,8 +74,6 @@ namespace TopRaceServerBL.Models
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.HostUserId).HasColumnName("HostUserID");
-
                 entity.Property(e => e.LastUpdateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.PreviousPlayerId).HasColumnName("PreviousPlayerID");
@@ -92,12 +90,6 @@ namespace TopRaceServerBL.Models
                     .WithMany(p => p.GameCurrentPlayerInTurns)
                     .HasForeignKey(d => d.CurrentPlayerInTurnId)
                     .HasConstraintName("game_currentplayerinturnid_foreign");
-
-                entity.HasOne(d => d.HostUser)
-                    .WithMany(p => p.Games)
-                    .HasForeignKey(d => d.HostUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("game_hostuserid_foreign");
 
                 entity.HasOne(d => d.PreviousPlayer)
                     .WithMany(p => p.GamePreviousPlayers)

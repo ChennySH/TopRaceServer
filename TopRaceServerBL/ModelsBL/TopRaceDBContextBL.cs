@@ -145,12 +145,12 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGame(int GameID)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.Id == GameID).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Where(gm => gm.Id == GameID).FirstOrDefault();
             return g;
         }
         public Game GetGameFromKey(string privateKey)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.HostUser).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
 
             return g;
         }
