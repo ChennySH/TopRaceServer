@@ -273,7 +273,7 @@ namespace TopRaceServerBL.Models
                         };
                     }
 
-                } while (CheckMover(ladders, ladders[i]) && CheckMover(snakes, ladders[i]));
+                } while ((!CheckMover(ladders, ladders[i])) || (!CheckMover(snakes, ladders[i])));
 
             }
             // setting the snakes
@@ -332,7 +332,7 @@ namespace TopRaceServerBL.Models
                             NextPosId = startId + 1,
                         };
                     }
-                } while (CheckMover(ladders, snakes[i]) && CheckMover(snakes, snakes[i]));
+                } while ((!CheckMover(ladders, snakes[i])) || (!CheckMover(snakes, snakes[i])));
             }
             foreach(Mover l in ladders)
             {
@@ -423,7 +423,7 @@ namespace TopRaceServerBL.Models
 
             for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < cols; i++)
+                for (int j = 0; j < cols; j++)
                 {
                     twoDimensionalArray[i, j] = jaggedArray[i][j];
                 }
@@ -438,10 +438,12 @@ namespace TopRaceServerBL.Models
             {
                 if (m != null)
                 {
-                    if (m.StartPosId == mover.StartPosId || m.StartPosId == mover.EndPosId ||
-                        m.EndPosId == mover.StartPosId || m.EndPosId == mover.EndPosId)
+                    if (m.Id != mover.Id) 
                     {
-                        return false;
+                        if (m.StartPosId == mover.StartPosId || m.StartPosId == mover.EndPosId || m.EndPosId == mover.StartPosId || m.EndPosId == mover.EndPosId)
+                        {
+                            return false;
+                        }
                     }
                 }
             }

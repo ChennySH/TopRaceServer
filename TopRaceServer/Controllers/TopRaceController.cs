@@ -383,7 +383,7 @@ namespace TopRaceServer.Controllers
         }
         [Route("Play")]
         [HttpGet]
-        public GameDTO Play(int GameID)
+        public GameDTO Play(int gameID)
         {
             try
             {
@@ -395,7 +395,7 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 // checking in the user is in the game;
-                Game game = this.context.GetGame(GameID);
+                Game game = this.context.GetGame(gameID);
                 if (!this.context.IsInGame(game, currentUser.Id))
                 {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
