@@ -83,6 +83,7 @@ namespace TopRaceServerBL.Models
             }
             return false;
         }
+
         public PlayersInGame CreatePlayerInGame(User user, bool isHost, Game game)
         {
             //this.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
