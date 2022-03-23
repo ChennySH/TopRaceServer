@@ -212,173 +212,153 @@ namespace TopRaceServerBL.Models
         }
         public Mover[][] CreateGameBoard()
         {
-            List<int> TakenPosIDs = new List<int>();
             Mover[,] board = new Mover[10, 10];
-            Mover[] ladders = new Mover[8];
-            Mover[] snakes = new Mover[8];
-            Random rnd = new Random();
-            // setting the ladders
-            for (int i = 0; i < ladders.Length; i++)
+            List<int> freePositions = new List<int>();
+            List<int> moversPosition = new List<int>();
+            List<int> group1 = new List<int>();
+            List<int> group2 = new List<int>();
+            List<int> group3 = new List<int>();
+            List<int> group4 = new List<int>();
+            List<Mover> snakes = new List<Mover>();
+            List<Mover> ladders = new List<Mover>();
+            // deviding the board to 4 different groups
+            for (int i = 2; i < 100; i++)
             {
-                bool check = true;
-                do
-                {                  
-                    // 5 small ladders
-                    if (i >= 0 && i <= 4)
-                    {
-                        int startId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
-                        int endId = startId + rnd.Next(8, 21);
-                        ladders[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsLadder = true
-                        };
-                    }
-                    // 2 medium ladders
-                    if (i == 5)
-                    {
-                        int startId = rnd.Next(1, 26);
-                        int endId = rnd.Next(50, 66);
-                        ladders[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsLadder = true
-                        };
-                    }
-                    if (i == 6)
-                    {
-                        int startId = rnd.Next(15, 41);
-                        int endId = rnd.Next(70, 86);
-                        ladders[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsLadder = true
-                        };
-                    }
-                    // 1 big ladder
-                    if (i == 7)
-                    {
-                        int startId = rnd.Next(10, 31);
-                        int endId = rnd.Next(70, 96);
-                        ladders[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsLadder = true
-                        };
-                    }
-                    TakenPosIDs.Add(ladders[i].StartPosId);
-                    TakenPosIDs.Add(ladders[i].EndPosId);
-                    for (int j = 0; j < ladders.Length; j++)
-                    {
-                        if(i != j)
-                        {
-                            if(ladders[j] != null)
-                            {
-                                if (ladders[i].StartPosId == ladders[j].StartPosId || ladders[i].StartPosId == ladders[j].EndPosId ||
-                                    ladders[i].EndPosId == ladders[j].StartPosId || ladders[i].EndPosId == ladders[j].EndPosId) 
-                                {
-                                    check = false;
-                                }
-                            }
-                        }
-                    }
-
-                } while (check == false);
-
-            }
-            // setting the snakes
-            for (int i = 0; i < snakes.Length; i++)
-            {
-                bool check = true;
-                do
+                int decedes = i / 10;
+                int digits = i % 10;
+                if (i <= 50)
                 {
-                    // 5 small ladders
-                    if (i >= 0 && i <= 4)
+                    if ((decedes % 2 == 0 && digits <= 5) || ((decedes % 2 == 1 && digits > 5)))
                     {
-                        int endId = i * rnd.Next(9, 16) + rnd.Next(2, 16);
-                        int startId = endId + rnd.Next(8, 21);
-                        snakes[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsSnake = true
-                        };
+                        group1.Add(i);
                     }
-                    // 1 medium snakes
-                    if (i == 5)
+                    else
                     {
-                        int startId = rnd.Next(55, 86);
-                        int endId = rnd.Next(10, 31);
-                        snakes[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsSnake = true
-                        };
+                        group2.Add(i);
                     }
-                    // 1 top snake
-                    if (i == 6)
+                }
+                else
+                {
+                    if ((decedes % 2 == 0 && digits <= 5) || ((decedes % 2 == 1 && digits > 5)))
                     {
-                        int startId = rnd.Next(96, 100);
-                        int endId = rnd.Next(40, 71);
-                        snakes[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                            IsSnake = true
-                        };
+                        group4.Add(i);
                     }
-                    // 1 big snake
-                    if (i == 7)
+                    else
                     {
-                        int startId = rnd.Next(80, 97);
-                        int endId = rnd.Next(20, 41);
-                        snakes[i] = new Mover
-                        {
-                            StartPosId = startId,
-                            EndPosId = endId,
-                            NextPosId = startId + 1,
-                        };
+                        group3.Add(i);
                     }
-                    for (int j = 0; j < ladders.Length; j++)
-                    {
-                        if (ladders[j] != null)
-                        {
-                            if (snakes[i].StartPosId == ladders[j].StartPosId || snakes[i].StartPosId == ladders[j].EndPosId ||
-                                snakes[i].EndPosId == ladders[j].StartPosId || snakes[i].EndPosId == ladders[j].EndPosId)
-                            {
-                                check = false;
-                            }
-                        }
-                    }
-                    for (int j = 0; j < ladders.Length; j++)
-                    {
-                        if (i != j)
-                        {
-                            if (snakes[j] != null)
-                            {
-                                if (snakes[i].StartPosId == snakes[j].StartPosId || snakes[i].StartPosId == snakes[j].EndPosId ||
-                                    snakes[i].EndPosId == snakes[j].StartPosId || snakes[i].EndPosId == snakes[j].EndPosId)
-                                {
-                                    check = false;
-                                }
-                            }
-                        }
-                    }
-                } while (check == false); ;
+                }
             }
-            foreach(Mover l in ladders)
+            Random rnd = new Random();
+            for (int i = 0; i < 16; i++)//getting 16 random free positions on group 1
+            {
+                int num = group1[rnd.Next(0, group1.Count)];
+                freePositions.Add(num);
+                group1.Remove(num);
+            }
+            for (int i = 0; i < 17; i++)//getting 17 random free positions on group 2
+            {
+                int num = group2[rnd.Next(0, group2.Count)];
+                freePositions.Add(num);
+                group2.Remove(num);
+            }
+            for (int i = 0; i < 17; i++)//getting 17 random free positions on group 3
+            {
+                int num = group3[rnd.Next(0, group3.Count)];
+                freePositions.Add(num);
+                group3.Remove(num);
+            }
+            int mustSnakePos = rnd.Next(97, 100);// setting a position between 97 - 99 where there must to be a snake
+            for (int i = 0; i < 16; i++)//getting 16 random free positions on group 4
+            {
+                int num = group4[rnd.Next(0, group4.Count)];
+                if (num == mustSnakePos)
+                {
+                    while (num == mustSnakePos)// if the snake pos is chosen you pick another one instead
+                    {
+                        num = group4[rnd.Next(0, group4.Count)];
+                    }
+                }
+                freePositions.Add(num);
+                group4.Remove(num);
+            }
+            foreach (int n in group1)
+            {
+                moversPosition.Add(n);
+            }
+            foreach (int n in group2)
+            {
+                moversPosition.Add(n);
+            }
+            foreach (int n in group3)
+            {
+                moversPosition.Add(n);
+            }
+            foreach (int n in group4)
+            {
+                moversPosition.Add(n);
+            }
+            moversPosition.Sort();
+            //setting the snakes
+
+            //setting the top snake
+            int topIndex = moversPosition.IndexOf(mustSnakePos);//getting the index
+            int topSnakeEndPos = moversPosition[rnd.Next(0, topIndex)];//setting the endPos by getting an index loser than the start index
+            Mover topSnake = new Mover
+            {
+                StartPosId = mustSnakePos,
+                EndPosId = topSnakeEndPos,
+                IsLadder = false,
+                IsSnake = true
+            };
+            //adding the snake
+            snakes.Add(topSnake);
+            moversPosition.Remove(mustSnakePos);
+            moversPosition.Remove(topSnakeEndPos);
+            for (int i = 0; i < 7; i++)
+            {
+                int startIndex = rnd.Next(2, moversPosition.Count);// setting a start index which can't be the first advalible pos idnex
+                int endIndex = rnd.Next(0, startIndex);// seting a end index lower than the start index
+                // getting the pos ids
+                int startPosID = moversPosition[startIndex];
+                int endPosId = moversPosition[endIndex];
+                // creating the snake
+                Mover snake = new Mover
+                {
+                    StartPosId = startPosID,
+                    EndPosId = endPosId,
+                    IsLadder = false,
+                    IsSnake = true,
+                };
+                // adding the snake
+                snakes.Add(snake);
+                // removing the taken positions
+                moversPosition.Remove(startPosID);
+                moversPosition.Remove(endPosId);
+            }
+            // setting the ladders
+            for (int i = 0; i < 8; i++)
+            {
+                int startIndex = rnd.Next(0, moversPosition.Count - 1);// setting a start index which can't be the last advalible pos idnex
+                int endIndex = rnd.Next(startIndex + 1, moversPosition.Count);// seting a end index higher than the start index
+                // getting the pos ids
+                int startPosID = moversPosition[startIndex];
+                int endPosId = moversPosition[endIndex];
+                // creating the ladder
+                Mover ladder = new Mover
+                {
+                    StartPosId = startPosID,
+                    EndPosId = endPosId,
+                    IsLadder = true,
+                    IsSnake = false,
+                };
+                // adding the ladder
+                ladders.Add(ladder);
+                // removing the taken positions
+                moversPosition.Remove(startPosID);
+                moversPosition.Remove(endPosId);
+            }
+            foreach (Mover l in ladders)
             {
                 l.StartPos = this.Positions.Where(p => p.Id == l.StartPosId).FirstOrDefault();
                 l.NextPos = this.Positions.Where(p => p.Id == l.NextPosId).FirstOrDefault();
