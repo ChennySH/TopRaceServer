@@ -448,7 +448,7 @@ namespace TopRaceServer.Controllers
                     {
                         if (game.CurrentPlayerInTurnId == lst[lst.Count - 1].Id)
                         {
-                            nextId = lst[1].Id;
+                            nextId = lst[0].Id;
                         }
                         else
                         {
