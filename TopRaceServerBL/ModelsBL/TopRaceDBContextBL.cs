@@ -151,9 +151,15 @@ namespace TopRaceServerBL.Models
         }
         public Game GetGameFromKey(string privateKey)
         {
-            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.CurrentPos).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1 && GetPlayersNumber(privateKey) < 4).FirstOrDefault();
-
-            return g;
+            Game g = this.Games.Include(gm => gm.Status).Include(gm => gm.Messages).ThenInclude(m => m.From).ThenInclude(p => p.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.Color).Include(gm => gm.PlayersInGames).ThenInclude(pl => pl.CurrentPos).Where(gm => gm.PrivateKey == privateKey && gm.StatusId == 1).FirstOrDefault();
+            if (g == null)
+                return null;
+            int playersNum = this.GetPlayersNumber(g.Id);
+            if (playersNum < 4)
+            { 
+                return g; 
+            }
+            return null;
         }
         public void AddMessage(Message message)
         {
@@ -309,6 +315,7 @@ namespace TopRaceServerBL.Models
             {
                 StartPosId = mustSnakePos,
                 EndPosId = topSnakeEndPos,
+                NextPosId = mustSnakePos + 1,
                 IsLadder = false,
                 IsSnake = true
             };
@@ -328,6 +335,7 @@ namespace TopRaceServerBL.Models
                 {
                     StartPosId = startPosID,
                     EndPosId = endPosId,
+                    NextPosId = startPosID + 1,
                     IsLadder = false,
                     IsSnake = true,
                 };
@@ -350,6 +358,7 @@ namespace TopRaceServerBL.Models
                 {
                     StartPosId = startPosID,
                     EndPosId = endPosId,
+                    NextPosId = startPosID + 1,
                     IsLadder = true,
                     IsSnake = false,
                 };

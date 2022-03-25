@@ -354,7 +354,7 @@ namespace TopRaceServer.Controllers
                 Game g = this.context.GetGame(gameID);
 
                 // getting the number of player in the game
-                int playersNum = this.context.GetPlayersNumber(gameID);
+                  int playersNum = this.context.GetPlayersNumber(gameID);
                 // choosing a random starter
                 Random rnd = new Random();
                 int firstNum = rnd.Next(1, playersNum + 1);
@@ -365,12 +365,11 @@ namespace TopRaceServer.Controllers
                     if (pl.IsInGame)
                     {
                         counter++;
-                    }
-                    if(counter == firstNum)
-                    {
-                        g.CurrentPlayerInTurnId = pl.Id;
-                    }
-                 
+                        if (counter == firstNum)
+                        {
+                            g.CurrentPlayerInTurnId = pl.Id;
+                        }
+                    }                 
                 }
                 this.context.Games.Update(g);
                 this.context.SaveChanges();
@@ -384,7 +383,7 @@ namespace TopRaceServer.Controllers
         [Route("Play")]
         [HttpGet]
         public GameDTO Play(int gameID)
-        {
+          {
             try
             {
                 // checking if there id a user active
@@ -402,11 +401,11 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 // checking if the user requesting is the user who's turn is now
-                if (game.CurrentPlayerInTurn.UserId != currentUser.Id)
-                {
-                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                    return null;
-                }
+                //if (game.CurrentPlayerInTurn.UserId != currentUser.Id)
+                //{
+                //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                //    return null;
+                //}
                 // rolling the dice - getting a random number between 1 to 6
                 Random rnd = new Random();
                 int rollResult = rnd.Next(1, 7);
@@ -443,27 +442,25 @@ namespace TopRaceServer.Controllers
                 if (rollResult != 6)
                 {
                     // Set CurrentPlayer and previous player
-                    List<PlayersInGame> lst = game.PlayersInGames.ToList();
-                    do
+                    List<PlayersInGame> lst = game.PlayersInGames.Where(pl => pl.IsInGame).ToList();
+
+                    if (game.CurrentPlayerInTurnId == lst[lst.Count - 1].Id)
                     {
-                        if (game.CurrentPlayerInTurnId == lst[lst.Count - 1].Id)
+                        nextId = lst[0].Id;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < lst.Count; i++)
                         {
-                            nextId = lst[0].Id;
-                        }
-                        else
-                        {
-                            for (int i = 0; i < lst.Count; i++)
+                            PlayersInGame pl = lst[i];
+                            if (pl.Id == game.CurrentPlayerInTurnId)
                             {
-                                PlayersInGame pl = lst[i];
-                                if (pl.Id == game.CurrentPlayerInTurnId)
-                                {
-                                    nextId = lst[i + 1].Id;
-                                }
+                                nextId = lst[i + 1].Id;
                             }
                         }
-                    } while (this.context.PlayersInGames.Where(pl => pl.Id == nextId).FirstOrDefault().IsInGame);
-                    game.CurrentPlayerInTurnId = nextId;
+                    }
                     game.PreviousPlayerId = game.CurrentPlayerInTurnId;
+                    game.CurrentPlayerInTurnId = nextId;
                 }
                 // checking if he won
                 if(newPosId == 100)
@@ -473,6 +470,7 @@ namespace TopRaceServer.Controllers
                 // updating the last roll result
                 game.LastRollResult = rollResult;
                 this.context.Games.Update(game);
+                this.context.SaveChanges();
                 return new GameDTO(game);
 
             }
