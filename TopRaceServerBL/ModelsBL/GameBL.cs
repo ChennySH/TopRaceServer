@@ -11,7 +11,6 @@ namespace TopRaceServerBL.Models
 {
     public partial class Game
     {
-        
-       
+         
     }
 }
