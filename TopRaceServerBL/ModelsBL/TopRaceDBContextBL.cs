@@ -113,7 +113,7 @@ namespace TopRaceServerBL.Models
                     foreach (PlayersInGame p in game.PlayersInGames)
                     {
                         if (p.ColorId == color.Id && p.IsInGame)
-                            isInUse = true;
+                        { isInUse = true; }
                     }
                 }
                 if (!isInUse)
