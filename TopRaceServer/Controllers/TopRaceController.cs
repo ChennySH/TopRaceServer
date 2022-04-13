@@ -352,9 +352,10 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 Game g = this.context.GetGame(gameID);
-
+                g.StatusId = 2;
+                g.Status = context.GameStatuses.Where(s => s.Id == 2).FirstOrDefault();
                 // getting the number of player in the game
-                  int playersNum = this.context.GetPlayersNumber(gameID);
+                int playersNum = this.context.GetPlayersNumber(gameID);
                 // choosing a random starter
                 Random rnd = new Random();
                 int firstNum = rnd.Next(1, playersNum + 1);
