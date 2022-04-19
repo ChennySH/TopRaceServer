@@ -258,6 +258,12 @@ namespace TopRaceServer.Controllers
         {
             return this.context.Colors.ToList();
         }
+        [Route("GetAllPositions")]
+        [HttpGet]
+        public List<Position> GetAllPositions()
+        {
+            return this.context.Positions.ToList();
+        }
         [Route("UpdatePlayer")]
         [HttpPost]
         public bool UpdatePlayer([FromBody] PlayersInGame playerInGame)
@@ -352,6 +358,7 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 Game g = this.context.GetGame(gameID);
+                g.LastUpdateTime = DateTime.UtcNow;
                 g.StatusId = 2;
                 g.Status = context.GameStatuses.Where(s => s.Id == 2).FirstOrDefault();
                 // getting the number of player in the game
@@ -470,6 +477,7 @@ namespace TopRaceServer.Controllers
                 }
                 // updating the last roll result
                 game.LastRollResult = rollResult;
+                game.LastUpdateTime = DateTime.UtcNow;
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
                 return new GameDTO(game);
