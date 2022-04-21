@@ -24,6 +24,7 @@ CREATE TABLE "Game"(
     "IsPrivate" BIT NOT NULL,
     "PrivateKey" NVARCHAR(255) NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL,
+    "UpdatesCounter" INT NOT NULL,
     "Board" TEXT NOT NULL,
     "StatusID" INT NOT NULL,
     "WinnerID" INT NULL,

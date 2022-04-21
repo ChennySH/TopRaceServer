@@ -153,6 +153,7 @@ namespace TopRaceServer.Controllers
                 game.PrivateKey = this.context.GetPrivateKey();
                 // creating the game's board
                 game.Board = this.context.CreateGameBoard();
+                game.UpdatesCounter = 0;
                 Game dbGame = game.ToGame();
                 this.context.Games.Update(dbGame);
                 this.context.SaveChanges();
@@ -358,7 +359,8 @@ namespace TopRaceServer.Controllers
                     return null;
                 }
                 Game g = this.context.GetGame(gameID);
-                g.LastUpdateTime = DateTime.UtcNow;
+                g.LastUpdateTime = DateTime.Now;
+                g.UpdatesCounter = g.UpdatesCounter + 1;
                 g.StatusId = 2;
                 g.Status = context.GameStatuses.Where(s => s.Id == 2).FirstOrDefault();
                 // getting the number of player in the game
@@ -470,6 +472,11 @@ namespace TopRaceServer.Controllers
                     game.PreviousPlayerId = game.CurrentPlayerInTurnId;
                     game.CurrentPlayerInTurnId = nextId;
                 }
+                else
+                {
+                    game.PreviousPlayerId = game.CurrentPlayerInTurnId;
+                    game.PreviousPlayer = game.CurrentPlayerInTurn;
+                }
                 // checking if he won
                 if(newPosId == 100)
                 {
@@ -477,7 +484,8 @@ namespace TopRaceServer.Controllers
                 }
                 // updating the last roll result
                 game.LastRollResult = rollResult;
-                game.LastUpdateTime = DateTime.UtcNow;
+                game.LastUpdateTime = DateTime.Now;
+                game.UpdatesCounter = game.UpdatesCounter + 1;
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
                 return new GameDTO(game);

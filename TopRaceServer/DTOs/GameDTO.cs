@@ -17,6 +17,7 @@ namespace TopRaceServer.DTOs
         public int HostUserId { get; set; }
         public DateTime LastUpdateTime { get; set; }
         public int StatusId { get; set; }
+        public int UpdatesCounter { get; set; }
         public int? WinnerId { get; set; }
         public int? CurrentPlayerInTurnId { get; set; }
         public int? PreviousPlayerId { get; set; }
@@ -45,7 +46,7 @@ namespace TopRaceServer.DTOs
             Id = game.Id;
             PrivateKey = game.PrivateKey;
             IsPrivate = game.IsPrivate;
-
+            UpdatesCounter = game.UpdatesCounter;
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
@@ -73,7 +74,7 @@ namespace TopRaceServer.DTOs
             return new Game()
             {
                 Messages = this.Messages?.ToList(),
-                LastUpdateTime = this.LastUpdateTime,
+                LastUpdateTime = this.LastUpdateTime.ToUniversalTime(),
                 GameName = this.GameName,
                 PlayersInGames = this.PlayersInGames?.ToList(),
                 Winner = this.Winner,
@@ -89,6 +90,7 @@ namespace TopRaceServer.DTOs
                 PreviousPlayerId = this.PreviousPlayerId,
                 PreviousPlayer = this.PreviousPlayer,
                 LastRollResult = this.LastRollResult,
+                UpdatesCounter = this.UpdatesCounter,
             };
         }
 
@@ -115,7 +117,7 @@ namespace TopRaceServer.DTOs
             return jaggedArray;
         }
 
-        static T[,] ToMatrix<T>(T[][] jaggedArray)
+        public static T[,] ToMatrix<T>(T[][] jaggedArray)
         {
             int rows = jaggedArray.Length;
             int cols = jaggedArray[0].Length;

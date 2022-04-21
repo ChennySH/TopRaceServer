@@ -18,6 +18,7 @@ namespace TopRaceServerBL.Models
         public bool IsPrivate { get; set; }
         public string PrivateKey { get; set; }
         public DateTime LastUpdateTime { get; set; }
+        public int UpdatesCounter { get; set; }
         public string Board { get; set; }
         public int StatusId { get; set; }
         public int? WinnerId { get; set; }
