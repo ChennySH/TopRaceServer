@@ -497,6 +497,113 @@ namespace TopRaceServer.Controllers
                 return null;
             }
         }
+        [Route("PlayTest")]
+        [HttpGet]
+        public GameDTO PlayTest(int gameID, int wantedResult)
+        {
+            try
+            {
+                // checking if there id a user active
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                // checking in the user is in the game;
+                Game game = this.context.GetGame(gameID);
+                if (!this.context.IsInGame(game, currentUser.Id))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                // checking if the user requesting is the user who's turn is now
+                //if (game.CurrentPlayerInTurn.UserId != currentUser.Id)
+                //{
+                //    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                //    return null;
+                //}
+                // rolling the dice - getting a random number between 1 to 6
+                Random rnd = new Random();
+                int rollResult = wantedResult;
+                // the player
+                PlayersInGame currentPlayerInTurn = game.CurrentPlayerInTurn;
+                // getting previous position
+                Position previousPos = currentPlayerInTurn.CurrentPos;
+                // getting the position id after the roll
+                int newPosId = previousPos.Id + rollResult;
+                if (newPosId > 100)
+                {
+                    newPosId = 100 - (newPosId - 100);
+                }
+                // getting the pos itself
+                Position newPos = this.context.Positions.Where(p => p.Id == newPosId).FirstOrDefault();
+                // using the gameDTO in order to check if he landed on a ladder or a snake
+                // and if he did to move him to the mover's end position
+                GameDTO gameDTO = new GameDTO(game);
+                Mover[,] board = TopRaceDBContext.ToMatrix(gameDTO.Board);
+                Mover mover = board[newPos.X, newPos.Y];
+                if (mover.IsLadder || mover.IsSnake)
+                {
+                    int finalPosId = mover.EndPosId;
+                    Position finalPos = this.context.Positions.Where(p => p.Id == finalPosId).FirstOrDefault();
+                    newPos = finalPos;
+                    newPosId = finalPosId;
+                }
+                // chaning the position in the player in the DB
+                currentPlayerInTurn.CurrentPosId = newPosId;
+                //currentPlayerInTurn.CurrentPos = newPos;
+                this.context.PlayersInGames.Update(currentPlayerInTurn);
+                // only of roll result lower than 6 the turn moves otherwise extra dice!
+                int nextId = currentPlayerInTurn.Id;
+                if (rollResult != 6)
+                {
+                    // Set CurrentPlayer and previous player
+                    List<PlayersInGame> lst = game.PlayersInGames.Where(pl => pl.IsInGame).ToList();
+
+                    if (game.CurrentPlayerInTurnId == lst[lst.Count - 1].Id)
+                    {
+                        nextId = lst[0].Id;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < lst.Count; i++)
+                        {
+                            PlayersInGame pl = lst[i];
+                            if (pl.Id == game.CurrentPlayerInTurnId)
+                            {
+                                nextId = lst[i + 1].Id;
+                            }
+                        }
+                    }
+                    game.PreviousPlayerId = game.CurrentPlayerInTurnId;
+                    game.CurrentPlayerInTurnId = nextId;
+                }
+                else
+                {
+                    game.PreviousPlayerId = game.CurrentPlayerInTurnId;
+                    game.PreviousPlayer = game.CurrentPlayerInTurn;
+                }
+                // checking if he won
+                if (newPosId == 100)
+                {
+                    game.WinnerId = currentPlayerInTurn.Id;
+                }
+                // updating the last roll result
+                game.LastRollResult = rollResult;
+                game.LastUpdateTime = DateTime.Now;
+                game.UpdatesCounter = game.UpdatesCounter + 1;
+                this.context.Games.Update(game);
+                this.context.SaveChanges();
+                return new GameDTO(game);
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return null;
+            }
+        }
     }
     
 }
