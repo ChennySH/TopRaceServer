@@ -501,7 +501,6 @@ namespace TopRaceServer.Controllers
         [HttpGet]
         public GameDTO PlayTest(int gameID, int wantedResult)
         {
-
             try
             {
                 // checking if there id a user active
