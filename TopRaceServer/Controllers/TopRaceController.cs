@@ -8,6 +8,8 @@ using TopRaceServer.DTOs;
 //Add the below
 using TopRaceServerBL.Models;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TopRaceServer.Controllers
 {
@@ -597,6 +599,55 @@ namespace TopRaceServer.Controllers
                 this.context.SaveChanges();
                 return new GameDTO(game);
 
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return null;
+            }
+        }
+        [Route("ResetGame")]
+        [HttpGet]
+        public GameDTO ResetGame(int gameID)
+        {
+            try
+            {
+                // checking if there id a user active
+                User currentUser = HttpContext.Session.GetObject<User>("theUser");
+                if (currentUser == null)
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                // checking in the user is in the game;
+                Game game = this.context.GetGame(gameID);
+                if (!this.context.IsInGame(game, currentUser.Id))
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    return null;
+                }
+                game.LastUpdateTime = DateTime.Now;
+                game.UpdatesCounter = game.UpdatesCounter + 1;
+                game.StatusId = 1;
+                game.Status = this.context.GameStatuses.Where(s => s.Id == 1).FirstOrDefault();
+                foreach(PlayersInGame pl in game.PlayersInGames)
+                {
+                    if (pl.IsInGame)
+                    {
+                        pl.DidPlayInGame = true;
+                        pl.CurrentPosId = 1;
+                        pl.CurrentPos = this.context.Positions.Where(pos => pos.Id == 1).FirstOrDefault();
+                    }
+                }
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve, //avoid reference loops!
+                    PropertyNameCaseInsensitive = true
+                };
+                Mover[][] board = this.context.CreateGameBoard();
+                game.Board = JsonSerializer.Serialize<Mover[][]>(board, options);
+                this.context.Games.Update(game);
+                return new GameDTO(game);
             }
             catch (Exception e)
             {
