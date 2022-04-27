@@ -645,7 +645,14 @@ namespace TopRaceServer.Controllers
                     PropertyNameCaseInsensitive = true
                 };
                 Mover[][] board = this.context.CreateGameBoard();
-                game.Board = JsonSerializer.Serialize<Mover[][]>(board, options);
+                string newBoard = JsonSerializer.Serialize<Mover[][]>(board, options);
+                while(newBoard == game.Board)
+                {
+                    board = this.context.CreateGameBoard();
+                    newBoard = JsonSerializer.Serialize<Mover[][]>(board, options);
+                }
+                game.Board = newBoard;
+                game.Winner = null;
                 this.context.Games.Update(game);
                 return new GameDTO(game);
             }
