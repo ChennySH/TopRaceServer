@@ -655,6 +655,7 @@ namespace TopRaceServer.Controllers
                 game.Winner = null;
                 this.context.Games.Update(game);
                 return new GameDTO(game);
+
             }
             catch (Exception e)
             {
