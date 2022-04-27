@@ -651,10 +651,13 @@ namespace TopRaceServer.Controllers
                     board = this.context.CreateGameBoard();
                     newBoard = JsonSerializer.Serialize<Mover[][]>(board, options);
                 }
+                game.PreviousPlayer = null;
                 game.Board = newBoard;
                 game.Winner = null;
-                this.context.Games.Update(game);
-                return new GameDTO(game);
+                this.context.Update(game);
+                this.context.SaveChanges();
+                GameDTO gameDTO = new GameDTO(game);
+                return gameDTO;
 
             }
             catch (Exception e)
