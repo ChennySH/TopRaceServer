@@ -335,10 +335,21 @@ namespace TopRaceServer.Controllers
                     return false;
                 }
                 Game game = this.context.GetGame(gameID);
+                game.UpdatesCounter = game.UpdatesCounter + 1;
                 PlayersInGame pl = this.context.PlayersInGames.Where(p => p.Id == playerInGameID).FirstOrDefault();
                 this.context.ChangeTracker.Clear();
                 pl.IsInGame = false;
                 this.context.Entry(pl).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                if (game.StatusId == 2)
+                {
+                    List<PlayersInGame> players = game.PlayersInGames.Where(pl => pl.IsInGame == true).ToList();
+                    if (players.Count == 1)
+                    {
+                        PlayersInGame player = players[0];
+                        game.WinnerId = player.Id;
+                    }
+                }
+                this.context.Games.Update(game);
                 this.context.SaveChanges();
                 return true;
             }
@@ -395,7 +406,7 @@ namespace TopRaceServer.Controllers
         [Route("Play")]
         [HttpGet]
         public GameDTO Play(int gameID)
-          {
+        {
             try
             {
                 // checking if there id a user active
@@ -411,6 +422,15 @@ namespace TopRaceServer.Controllers
                 {
                     Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
                     return null;
+                }
+                List<PlayersInGame> players = game.PlayersInGames.Where(pl => pl.IsInGame == true).ToList();
+                if(players.Count == 1)
+                {
+                    PlayersInGame player = players[0];
+                    game.WinnerId = player.Id;
+                    this.context.Games.Update(game);
+                    this.context.SaveChanges();
+                    return new GameDTO(game);
                 }
                 // checking if the user requesting is the user who's turn is now
                 //if (game.CurrentPlayerInTurn.UserId != currentUser.Id)
