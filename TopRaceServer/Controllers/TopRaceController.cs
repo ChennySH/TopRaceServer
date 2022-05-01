@@ -626,6 +626,7 @@ namespace TopRaceServer.Controllers
                 return null;
             }
         }
+
         [Route("ResetGame")]
         [HttpGet]
         public GameDTO ResetGame(int gameID)
