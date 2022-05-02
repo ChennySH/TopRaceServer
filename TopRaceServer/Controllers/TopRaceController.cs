@@ -340,6 +340,8 @@ namespace TopRaceServer.Controllers
                 this.context.ChangeTracker.Clear();
                 pl.IsInGame = false;
                 this.context.Entry(pl).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                this.context.SaveChanges();
+                this.context.ChangeTracker.Clear();
                 if (game.StatusId == 2)
                 {
                     List<PlayersInGame> players = game.PlayersInGames.Where(pl => pl.IsInGame == true).ToList();
@@ -348,8 +350,34 @@ namespace TopRaceServer.Controllers
                         PlayersInGame player = players[0];
                         game.WinnerId = player.Id;
                     }
+                    else if(game.CurrentPlayerInTurnId == playerInGameID)
+                    {
+                        List<PlayersInGame> allPlayers = game.PlayersInGames.ToList();
+                        bool found = false;
+                        bool set = false;
+                        for (int i = 0; i < allPlayers.Count; i++)
+                        {
+                            PlayersInGame p = allPlayers[i];
+                            if(p.Id == playerInGameID)
+                            {
+                                found = true;
+                            }
+                            if(found && !set)
+                            {
+                                if (p.IsInGame)
+                                {
+                                    game.CurrentPlayerInTurnId = p.Id;
+                                    set = true;
+                                }
+                            }
+                        }
+                        if (!set)
+                        {
+                            game.CurrentPlayerInTurnId = players[0].Id;
+                        }
+                    }
                 }
-                this.context.Games.Update(game);
+                this.context.Update(game);
                 this.context.SaveChanges();
                 return true;
             }
