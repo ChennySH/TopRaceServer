@@ -367,6 +367,7 @@ namespace TopRaceServer.Controllers
                                 if (p.IsInGame)
                                 {
                                     game.CurrentPlayerInTurnId = p.Id;
+                                    game.CurrentPlayerInTurn = p;
                                     set = true;
                                 }
                             }
@@ -374,10 +375,11 @@ namespace TopRaceServer.Controllers
                         if (!set)
                         {
                             game.CurrentPlayerInTurnId = players[0].Id;
+                            game.CurrentPlayerInTurn = players[0];
                         }
                     }
                 }
-                this.context.Update(game);
+                this.context.Entry(game).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 this.context.SaveChanges();
                 return true;
             }
@@ -536,6 +538,7 @@ namespace TopRaceServer.Controllers
                 game.LastRollResult = rollResult;
                 game.LastUpdateTime = DateTime.Now;
                 game.UpdatesCounter = game.UpdatesCounter + 1;
+                game.MovesCounter = game.MovesCounter + 1;
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
                 return new GameDTO(game);
@@ -643,6 +646,7 @@ namespace TopRaceServer.Controllers
                 game.LastRollResult = rollResult;
                 game.LastUpdateTime = DateTime.Now;
                 game.UpdatesCounter = game.UpdatesCounter + 1;
+                game.MovesCounter = game.MovesCounter + 1;
                 this.context.Games.Update(game);
                 this.context.SaveChanges();
                 return new GameDTO(game);

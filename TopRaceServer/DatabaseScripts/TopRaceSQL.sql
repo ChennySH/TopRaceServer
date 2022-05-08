@@ -25,6 +25,7 @@ CREATE TABLE "Game"(
     "PrivateKey" NVARCHAR(255) NOT NULL,
     "LastUpdateTime" DATETIME NOT NULL,
     "UpdatesCounter" INT NOT NULL,
+    "MovesCounter" INT NOT NULL,
     "Board" TEXT NOT NULL,
     "StatusID" INT NOT NULL,
     "WinnerID" INT NULL,
@@ -155,6 +156,8 @@ INSERT [User]
 VALUES('User2', 't@g2', '12345678', '0500000000', 0,0,0,'https://static01.nyt.com/images/2021/09/21/science/09tb-butterflies-1/09tb-butterflies-1-mobileMasterAt3x.jpg');
 INSERT [User]
 VALUES('User3', 't@g3', '12345678', '0500000000', 0,0,0,'https://ip.index.hr/remote/indexnew.s3.index.hr/989fd20a-b4d3-4f81-b1a3-0d4bdae4b0f4-46962987_l%20(1).jpg');
+INSERT [User]
+VALUES('User4', 't@g4', '12345678', '0500000000', 0,0,0,'https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FCamel&psig=AOvVaw3cE2Prj_gT4yLOczU7n1RB&ust=1651680062453000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCODQ4fHZw_cCFQAAAAAdAAAAABAD');
 INSERT [Position](x,y)--1--
 Values(0,0);
 INSERT [Position](x,y)--2--
