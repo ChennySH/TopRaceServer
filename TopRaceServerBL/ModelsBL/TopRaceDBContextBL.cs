@@ -91,6 +91,7 @@ namespace TopRaceServerBL.Models
             {
                 UserId = user.Id,
                 UserName = user.UserName,
+                Email = user.Email,
                 ProfilePic = user.ProfilePic,
                 IsHost = isHost,
                 IsInGame = true,

@@ -37,7 +37,7 @@ namespace TopRaceServerBL.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
             modelBuilder.Entity<Color>(entity =>
             {
@@ -190,6 +190,10 @@ namespace TopRaceServerBL.Models
                 entity.Property(e => e.ColorId).HasColumnName("ColorID");
 
                 entity.Property(e => e.CurrentPosId).HasColumnName("CurrentPosID");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.EnterTime).HasColumnType("datetime");
 

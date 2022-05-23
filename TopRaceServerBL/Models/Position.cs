@@ -19,7 +19,6 @@ namespace TopRaceServerBL.Models
         public int Id { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-
         [JsonIgnore]
         public virtual ICollection<Mover> MoverEndPos { get; set; }
         [JsonIgnore]

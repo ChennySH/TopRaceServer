@@ -39,6 +39,7 @@ CREATE TABLE "PlayersInGame"(
     "id" INT IDENTITY NOT NULL,
     "UserID" INT NOT NULL,
     "UserName" NVARCHAR(255) NOT NULL,
+    "Email" NVARCHAR(255) NOT NULL,
     "ProfilePic" NVARCHAR(255) NOT NULL,
     "IsHost" BIT NOT NULL,
     "IsInGame" BIT NOT NULL,

@@ -12,7 +12,6 @@ namespace TopRaceServerBL.Models
         {
             Games = new HashSet<Game>();
         }
-
         public int Id { get; set; }
         public string StatusName { get; set; }
         [JsonIgnore]
