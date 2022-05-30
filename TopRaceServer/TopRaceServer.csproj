@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Wwwroot\Images\ProfileImages\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Wwwroot\Images\CyanCrewmate.png" />
     <None Include="Wwwroot\Images\LimeCrewmate.png" />
     <None Include="Wwwroot\Images\OrangeCrewmate.png" />
