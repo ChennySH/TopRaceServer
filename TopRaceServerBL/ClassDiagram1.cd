@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TopRaceServerBL.Models.Color">
+    <Position X="9" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAAAAAAAAAEAAAAAAAAAAAAAAAAADAAAAAAA=</HashCode>
+      <FileName>Models\Color.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.Game">
+    <Position X="1.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAMQQAAAEABAACAAAgEIAAAAIAAAADjASAAAAA=</HashCode>
+      <FileName>Models\Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.GameStatus">
+    <Position X="5.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\GameStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.Message">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgACAAAAAAAAAAAAAAEAAACAABgAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Message.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.Mover">
+    <Position X="7.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAggAAAAAAAAAAAAAEAAAAAQAAAAAEAAAAAAAgAE=</HashCode>
+      <FileName>Models\Mover.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.PlayersInGame">
+    <Position X="3" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAADCCBAASAAEAAAACEIAAggAogQAEAAAQAAgwAAAAA=</HashCode>
+      <FileName>Models\PlayersInGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.Position">
+    <Position X="9" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAACAAAAAAAAAAAAAAAAAAAAAABAAACYAA=</HashCode>
+      <FileName>Models\Position.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TopRaceServerBL.Models.User">
+    <Position X="5.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAGAAACQAAAAAAAAAQAAAAEAAAAACAQABAAAAAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
